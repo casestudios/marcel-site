@@ -1,26 +1,41 @@
 import type { Metadata } from "next";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
-  title: "Marcel | AI-Powered CNC Diagnostics",
+  title: "Marcel — AI Quoting for CNC Shops",
   description:
-    "AI-powered CNC diagnostics for FANUC machines. When an alarm fires, Marcel gives your team the answer — cited, prioritized, and instant.",
+    "Marcel learns from your past jobs and generates accurate quotes on new work — instantly. No spreadsheets, no guessing, no waiting.",
   openGraph: {
-    title: "Marcel | AI-Powered CNC Diagnostics",
+    title: "Marcel — AI Quoting for CNC Shops",
     description:
-      "AI-powered CNC diagnostics for FANUC machines. Instant alarm diagnosis from 3,600+ manual pages.",
+      "Quote in seconds, not hours. Marcel learns your shop's pricing from real job history.",
     type: "website",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="bg-bg text-text-primary antialiased">{children}</body>
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

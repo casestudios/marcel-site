@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Archivo, Helvetica, Arial, sans-serif">
+  <defs>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M34 0H0V34" fill="none" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="scan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F5C518" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#F5C518" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ground -->
+  <rect width="1200" height="630" fill="#0A0B0D"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- registration corner ticks -->
+  <g stroke="#333B49" stroke-width="2" fill="none">
+    <path d="M40 62V40H62"/>
+    <path d="M1160 40h-22 M1160 40v22"/>
+    <path d="M40 568v22h22"/>
+    <path d="M1160 590h-22 M1160 590v-22"/>
+  </g>
+
+  <!-- wordmark -->
+  <g transform="translate(72,74)">
+    <rect width="46" height="46" rx="10" fill="#F5C518"/>
+    <path d="M11 35V13L23 26L35 13V35" fill="none" stroke="#0A0B0D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="64" y="24" font-size="24" font-weight="800" letter-spacing="6" fill="#E8EAED">MARCEL</text>
+    <text x="64" y="42" font-family="'Space Mono', Menlo, monospace" font-size="13" letter-spacing="3" fill="#565D6A">/ CNC  ·  CASE STUDY</text>
+  </g>
+
+  <!-- headline -->
+  <g transform="translate(72,238)">
+    <text font-size="76" font-weight="800" letter-spacing="-2" fill="#E8EAED">
+      <tspan x="0" y="0">When a machine</tspan>
+      <tspan x="0" y="86">stops, </tspan><tspan fill="#F5C518">the clock</tspan>
+      <tspan x="0" y="172" fill="#F5C518">starts.</tspan>
+    </text>
+  </g>
+
+  <text x="74" y="556" font-family="'Space Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#8A919E">The machine flags an alarm. Marcel finds the cited fix — and sends it on.</text>
+
+  <!-- pendant panel -->
+  <g transform="translate(792,196)">
+    <rect x="0" y="0" width="336" height="238" rx="12" fill="#101318" stroke="#232833"/>
+    <text x="24" y="42" font-family="'Space Mono', Menlo, monospace" font-size="12" letter-spacing="3" fill="#565D6A">CONTROL PENDANT</text>
+    <circle cx="270" cy="37" r="5" fill="#FF4438"/>
+    <text x="282" y="42" font-family="'Space Mono', Menlo, monospace" font-size="12" letter-spacing="2" fill="#FF4438">ALM</text>
+    <line x1="24" y1="58" x2="312" y2="58" stroke="#232833"/>
+
+    <rect x="24" y="74" width="288" height="104" rx="6" fill="#000000" stroke="#F5C518" stroke-opacity="0.25"/>
+    <rect x="24" y="74" width="288" height="30" fill="url(#scan)"/>
+    <text x="42" y="104" font-family="'Space Mono', Menlo, monospace" font-size="12" letter-spacing="3" fill="#565D6A">ALARM</text>
+    <text x="42" y="150" font-family="'Space Mono', Menlo, monospace" font-size="46" font-weight="700" letter-spacing="4" fill="#F5C518">SV0401</text>
+
+    <text x="24" y="206" font-family="'Space Mono', Menlo, monospace" font-size="13" letter-spacing="1" fill="#8A919E">SERVO · V-READY OFF</text>
+    <text x="24" y="224" font-family="'Space Mono', Menlo, monospace" font-size="12" fill="#F5C518">MARCEL ▸ <tspan fill="#8A919E">GROUNDED</tspan></text>
+  </g>
+
+  <!-- footer identifiers -->
+  <text x="72" y="596" font-family="'Space Mono', Menlo, monospace" font-size="13" letter-spacing="2" fill="#F5C518">marcelcnc.com</text>
+  <text x="1128" y="596" text-anchor="end" font-family="'Space Mono', Menlo, monospace" font-size="12" letter-spacing="2" fill="#565D6A">MRCL-CS-001 · REV 2026.07</text>
+</svg>

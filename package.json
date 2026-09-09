@@ -1,5 +1,5 @@
 {
-  "name": "marcel-site-temp",
+  "name": "marcel-site",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "framer-motion": "^12.35.2",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18"

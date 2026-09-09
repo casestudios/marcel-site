@@ -1,73 +1,60 @@
-"use client";
-
-import { motion } from "framer-motion";
+import SectionHeader from "./SectionHeader";
 
 const steps = [
   {
-    number: "01",
-    title: "Alarm Fires",
-    description:
-      "FANUC machine throws a code. Marcel detects it instantly via your connection or manual entry.",
+    name: "Observe",
+    text: "Start with a phone photo. An installed observer is another path where the machine and capture setup support it.",
   },
   {
-    number: "02",
-    title: "Marcel Diagnoses",
-    description:
-      "Hybrid RAG search across 3,600+ pages returns the exact cause, parameters to check, and countermeasures.",
+    name: "Confirm",
+    text: "Check the machine, controller and document revision. A familiar brand name alone does not establish the right manual.",
   },
   {
-    number: "03",
-    title: "Team Responds",
-    description:
-      "Your tech has a cited, prioritized action plan. No guessing. No waiting for the OEM.",
+    name: "Investigate",
+    text: "Keep the alarm, source references and technician checks together. Unanswered questions stay part of the case.",
+  },
+  {
+    name: "Hand off",
+    text: "Record what was done and the reported result. Download the context the next shift or service technician needs.",
   },
 ];
-
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 md:py-32 bg-surface">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl md:text-5xl font-bold text-center mb-20"
-        >
-          From Alarm to Answer in Seconds
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative">
-          {/* Connecting line */}
-          <div className="hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-px">
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="h-full bg-gradient-to-r from-accent/50 via-accent to-accent/50 origin-left"
-            />
-          </div>
-
-          {steps.map((step, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.2 }}
-              className="text-center relative"
-            >
-              <span className="inline-block font-mono text-4xl font-bold text-accent mb-4">
-                {step.number}
-              </span>
-              <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-              <p className="text-text-secondary leading-relaxed">
-                {step.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+    <section
+      id="how"
+      className="mx-auto max-w-frame px-5 py-20 md:px-8 md:py-28"
+    >
+      <SectionHeader
+        index="03"
+        label="From screen to service record"
+        title={
+          <>
+            Keep the context.
+            <br />
+            <span className="text-text-dim">Through every shift.</span>
+          </>
+        }
+      />
+      <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, i) => (
+          <li key={step.name} className="border-t border-line-bright pt-5">
+            <span className="font-mono text-sm text-amber">0{i + 1}</span>
+            <h3 className="mt-5 text-2xl">{step.name}</h3>
+            <p className="mt-3 text-base leading-relaxed text-text-dim">
+              {step.text}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-12 flex flex-col gap-3 border-l-2 border-amber bg-panel p-6 md:flex-row md:gap-8">
+        <h3 className="shrink-0 text-xl leading-tight">
+          Your team stays in control.
+        </h3>
+        <p className="max-w-2xl text-base text-text-dim">
+          The current observer is read-only. It sends no machine commands. An
+          alarm disappearing is an observation; a repair outcome is a separate
+          technician report.
+        </p>
       </div>
     </section>
   );

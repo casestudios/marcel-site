@@ -1,5 +1,16 @@
 # Deploying marcelcnc.com
 
+## Current repository and deployment account
+
+The source repository is `casestudios/marcel-site`. It is connected to the existing
+Vercel project `casestudios-projects/marcel-site`, with `main` as the production
+branch. The separate Sites URL remains a private review preview.
+
+Vercel checks the deployment commit's author against its connected GitHub account.
+Merge release pull requests while signed into the GitHub account connected to the
+Vercel project owner. Transferring repository ownership does not change existing
+commit authors. Preserve history when resolving an account mismatch.
+
 This site is a **static export** (`output: "export"` in `next.config.mjs`). The
 build produces a plain `./out` folder of HTML/CSS/JS — no server, no environment
 variables, no secrets. It can go on any static host.

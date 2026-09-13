@@ -1,40 +1,57 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
-        bg: "#0D0F14",
-        surface: "#13161D",
-        border: "#1E2330",
-        accent: "#F5C518",
-        alarm: "#E84040",
-        "text-primary": "#F0F0F0",
-        "text-secondary": "#8A8F9E",
-        "footer-bg": "#0A0C10",
+        ink: "#0A0B0D", // near-black graphite base
+        panel: "#101318", // raised surface
+        "panel-2": "#14181F", // deeper inset
+        line: "#232833", // hairline / blueprint grid
+        "line-bright": "#333B49",
+        amber: "#F5C518", // THE signal accent (FANUC control yellow)
+        "amber-dim": "#8A730F",
+        alarm: "#FF4438", // functional controller ALM state only, used sparingly
+        text: "#E8EAED",
+        "text-dim": "#8A919E",
+        "text-faint": "#565D6A",
       },
       fontFamily: {
-        sans: ["Inter", "DM Sans", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "IBM Plex Mono", "monospace"],
+        display: ["var(--font-display)", "Archivo", "system-ui", "sans-serif"],
+        sans: ["var(--font-display)", "Archivo", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "Space Mono", "ui-monospace", "monospace"],
       },
-      animation: {
-        "scroll-left": "scroll-left 30s linear infinite",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+      letterSpacing: {
+        tightest: "-0.045em",
+        widest: "0.28em",
+      },
+      maxWidth: {
+        frame: "1200px",
       },
       keyframes: {
-        "scroll-left": {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        blink: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
         },
-        "pulse-glow": {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "1" },
+        "alm-pulse": {
+          "0%, 100%": { opacity: "1", boxShadow: "0 0 10px 1px rgba(255,68,56,0.7)" },
+          "50%": { opacity: "0.35", boxShadow: "0 0 2px 0 rgba(255,68,56,0.3)" },
         },
+        "scan": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100%)" },
+        },
+        "rise": {
+          from: { opacity: "0", transform: "translateY(14px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        blink: "blink 1.05s step-end infinite",
+        "alm-pulse": "alm-pulse 1.1s ease-in-out infinite",
+        scan: "scan 3.2s linear infinite",
+        rise: "rise 0.5s cubic-bezier(0.22,1,0.36,1) both",
       },
     },
   },

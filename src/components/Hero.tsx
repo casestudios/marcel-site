@@ -23,20 +23,21 @@ export default function Hero() {
             <span className="text-amber">machine.</span>
           </h1>
           <p className="reveal mt-8 max-w-xl text-lg leading-relaxed text-text-dim md:text-xl">
-            Machine observations. The right manuals. A service record your next
-            shift can pick up. Marcel brings them together, starting with the
-            phone in your pocket.
+            Read the control screen. Pull the right manual page. Keep a service
+            record the next shift can pick up. Marcel starts with the phone in
+            your pocket and is moving onto the display itself.
           </p>
           <div className="reveal mt-9 flex flex-wrap items-center gap-5">
             <a href="#demo" className="button-primary">
               Explore the workflow <span aria-hidden>↓</span>
             </a>
-            <a href="#contact" className="link-amber py-3 font-mono text-sm">
-              Bring your machine ↗
+            <a href="#coverage" className="link-amber py-3 font-mono text-sm">
+              Where it stands ↗
             </a>
           </div>
           <p className="reveal mt-7 max-w-md text-sm leading-relaxed text-text-dim">
-            Working prototypes. Seeking our first shop trials.
+            Phone prototypes working today. Display bridge and technician
+            alerts in testing.
           </p>
         </div>
         <div className="reveal">

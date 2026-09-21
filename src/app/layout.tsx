@@ -18,9 +18,9 @@ const spaceMono = Space_Mono({
 });
 
 const SITE = siteConfig.url;
-const TITLE = "Marcel | CNC service records and machine insights";
+const TITLE = "Marcel | Read the control screen. Keep the record.";
 const DESCRIPTION =
-  "Machine observations, manual references and service history for the CNC shop. Explore Marcel's prototypes and help shape the first shop trials.";
+  "Marcel reads the control screen, pulls the right manual page, and keeps a service record across shifts. Phone prototypes working today. Display bridge and technician alerts in testing.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),

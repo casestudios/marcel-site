@@ -13,7 +13,7 @@ const teams = [
   {
     number: "03",
     name: "The service organization",
-    text: "Prepare a clearer handoff before the support call. Help shape future collaboration across customers, sites and service teams.",
+    text: "Prepare a clearer handoff before the support call. Keep one consistent record across customers, sites and service teams.",
   },
 ];
 export default function Audience() {

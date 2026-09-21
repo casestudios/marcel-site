@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 const links = [
-  { href: "#products", label: "For your shop" },
+  { href: "#products", label: "What it is" },
   { href: "#demo", label: "Explore Marcel" },
-  { href: "#coverage", label: "Machine coverage" },
+  { href: "#coverage", label: "Where it stands" },
 ];
 
 export default function Nav() {

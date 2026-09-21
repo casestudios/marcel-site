@@ -3,7 +3,7 @@ import SectionHeader from "./SectionHeader";
 const steps = [
   {
     name: "Observe",
-    text: "Start with a phone photo. An installed observer is another path where the machine and capture setup support it.",
+    text: "Start with a phone photo. A capture device on the display is the next path, now in testing, so the screen is watched continuously instead of on request.",
   },
   {
     name: "Confirm",
@@ -51,9 +51,10 @@ export default function HowItWorks() {
           Your team stays in control.
         </h3>
         <p className="max-w-2xl text-base text-text-dim">
-          The current observer is read-only. It sends no machine commands. An
-          alarm disappearing is an observation; a repair outcome is a separate
-          technician report.
+          The observer is read-only. It sends no machine commands. An alarm
+          disappearing is an observation; a repair outcome is a separate
+          technician report. When an alarm is read, the alert goes to a
+          person, not to the machine.
         </p>
       </div>
     </section>

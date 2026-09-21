@@ -4,9 +4,9 @@ const products = [
   {
     number: "01",
     name: "Pocket",
-    job: "Start with the screen.",
+    job: "Start with a photo of the screen.",
     status: "Working prototype",
-    text: "Photograph a control screen to read visible alarm text and identify the controller. Unconfirmed identity or missing documentation stays visible.",
+    text: "Photograph a control screen. Marcel reads the visible alarm, identifies the controller family, and pulls the manual page where it has the documentation. Unconfirmed identity or missing documentation stays visible instead of being papered over.",
     detail: "Screen reading and machine identification",
     href: "#demo",
   },
@@ -15,21 +15,30 @@ const products = [
     name: "Service cases",
     job: "Keep the investigation together.",
     status: "Working prototype",
-    text: "Record observations and work, review linked manual references, and download a service handoff. A technician records the outcome.",
+    text: "Record observations and work, review linked manual references, and download a service handoff. A technician records the outcome. The next shift picks up where the last one stopped.",
     detail: "Notes, case history and shift handoff",
     href: "#demo",
   },
   {
     number: "03",
-    name: "Watch",
-    job: "Know when the plan changes.",
-    status: "In development",
-    text: "Set expected run windows and surface unexpected stops or lost visibility. The next step is dependable observation and alerts on real machines.",
-    detail: "Expected production and observation health",
-    href: "#contact",
+    name: "Display bridge",
+    job: "Watch the screen, not the photo.",
+    status: "In testing",
+    text: "A small capture device on the control's display lets Marcel read the screen continuously, so an alarm is seen the moment it appears. Read-only by design. Proven on synthetic displays; now being tested against real controllers.",
+    detail: "Continuous screen reading on real machines",
+    href: "#coverage",
   },
   {
     number: "04",
+    name: "Technician alerts",
+    job: "Reach the right person.",
+    status: "Built, integrating",
+    text: "When an alarm is read, the diagnosis goes to a technician by message, routed by severity, with quiet hours for what can wait. The alert system exists today and is being connected to the display bridge.",
+    detail: "Severity routing and shift-aware delivery",
+    href: "#how",
+  },
+  {
+    number: "05",
     name: "Passport",
     job: "The machine is the starting point.",
     status: "Planned",
@@ -46,21 +55,21 @@ export default function Insight() {
     >
       <SectionHeader
         index="01"
-        label="For your shop"
+        label="What Marcel is"
         title={
           <>
             One machine record.
             <br />
-            <span className="text-amber">More ways to keep work moving.</span>
+            <span className="text-amber">Built up one piece at a time.</span>
           </>
         }
-        lead="Start with the job your team needs help with. Each workflow builds on the same machine and service history."
+        lead="What works today, what is in testing, and what comes next. Every piece builds on the same machine and service history."
       />
       <div className="mt-12 grid gap-px overflow-hidden rounded-[6px] border border-line bg-line md:grid-cols-2">
         {products.map((product) => (
           <article
             key={product.name}
-            className="flex flex-col bg-panel p-6 md:p-8"
+            className="flex flex-col bg-panel p-6 last:md:col-span-2 md:p-8"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="font-mono text-sm text-amber">
@@ -84,8 +93,8 @@ export default function Insight() {
         ))}
       </div>
       <p className="mt-5 max-w-3xl text-sm leading-relaxed text-text-dim">
-        Marcel is in prototype development. Shop trials will establish supported
-        machine configurations and practical reliability.
+        Statuses are current as of this revision. Results from the display
+        bridge on real controllers will be posted as they come in.
       </p>
     </section>
   );

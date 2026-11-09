@@ -1,34 +1,33 @@
-# Marcel CNC website
+# marcelcnc.com
 
-The public-facing website for Marcel, built with Next.js and a static export.
-Its control-panel theme uses graphite surfaces, an amber accent and a technical grid.
+The Marcel website: one static page with no build step.
 
-## Development
+## Run it locally
 
-```sh
-npm install
-npm run dev
-npm run lint
-npm run build
-```
+    python3 -m http.server 8000
 
-The production website is generated in `out/`. The site has no application API,
-manual corpus or customer data. All interactive examples are fictional and run
-in browser memory. Reloading resets the sample case. The downloadable handoff
-contains only the selected example and the notes entered into that example.
+Then open http://localhost:8000. Opening `index.html` straight from the file system works too, but browsers block web fonts there, so the type falls back to Arial.
 
-## Content
+## Deploy
 
-- Pocket screen reading and Service Cases are labeled working prototypes.
-- Watch is in development; Passport is planned.
-- The machine coverage section distinguishes manual research from validation.
-- Program delivery and recovery are described only as future research.
-- The contact link opens a prefilled email to the address in `src/lib/site.ts`.
-  Inbox delivery must be verified separately by the owner.
+Pushing to `main` deploys to production on Vercel. `vercel.json` tells Vercel this is a plain static site with no framework and no build. To undo a deploy, use Instant Rollback on the previous deployment in the Vercel dashboard.
 
-The source stays separate from the private Marcel application repository.
-Do not copy real manuals, customer screens, credentials or shop records here.
-The existing social-preview artwork is retained.
+## What's where
 
-The Sites configuration in `.openai/hosting.json` provides a private review URL.
-The existing Vercel/custom-domain setup is independent of that review publication.
+- `index.html`: the page and all of its copy.
+- `assets/site.css`: all of the page's style.
+- `assets/site.js`: the header, smooth scrolling, the film and its log, the recording tabs, the ladder and the phone menu.
+- `assets/fx.js`: the effects:
+  - the hero's scan and toolpath;
+  - the film's glow;
+  - the night clock;
+  - the rolling numbers and charts;
+  - the calculator;
+  - the machined wordmark.
+- `assets/console.js`: the "Run it yourself" console, a redraw of the November 2, 2026 simulated run. Marcel's two texts are copied word for word from that run.
+- `assets/palette.js`: the command menu (Cmd K or Ctrl K).
+- `assets/vendor/`: GSAP 3.13.0 (with ScrollTrigger, SplitText and ScrambleTextPlugin) and Lenis 1.1.13.
+- `assets/fonts/`: self-hosted Barlow, Barlow Semi Condensed and IBM Plex Mono (SIL Open Font License).
+- `media/`: the film, the recordings, the photos and the posters.
+
+The previous Next.js version of the site is in this repository's history.

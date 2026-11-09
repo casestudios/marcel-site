@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marcel | Air-gapped AI operator for American CNC shops</title>
+<meta name="description" content="Marcel reads a CNC control’s own screen, holds the feed before a tool breaks, works from that machine’s manuals, and texts whoever is on call. The control never goes on a network.">
+<meta name="theme-color" content="#110f0c">
+<link rel="canonical" href="https://marcelcnc.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://marcelcnc.com/">
+<meta property="og:title" content="Marcel: a stopped machine shouldn’t wait for morning">
+<meta property="og:description" content="An air-gapped AI operator for American CNC shops. It reads the control’s own screen and texts whoever is on call.">
+<meta property="og:image" content="https://marcelcnc.com/media/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<!--FONTS-->
+<link rel="preload" href="assets/fonts/barlow-semi-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<!--/FONTS-->
+<script>
+  try { document.documentElement.classList.add("js"); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion"); } catch (e) {}
+</script>
+<!--CSS-->
+<link rel="stylesheet" href="assets/site.css">
+<!--/CSS-->
+</head>
+<body>
+<!--BODY-->
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar" id="bar">
+  <div class="wrap bar-in">
+    <a class="mark" href="#top" aria-label="Marcel, back to top"><span class="mark-dot" aria-hidden="true"></span>Marcel</a>
+    <span class="shift" id="shift" aria-hidden="true" title="The night in the film, as you scroll"><span class="shift-t">02:14</span><span class="shift-ap">AM</span></span>
+    <nav class="nav" aria-label="Sections">
+      <a href="#try">Try it</a>
+      <a href="#today">What runs today</a>
+      <a href="#network">Your network</a>
+      <a href="#rules">When it acts</a>
+      <a href="#faq">Questions</a>
+    </nav>
+    <button class="cmd-btn" id="cmdBtn" type="button" aria-haspopup="dialog" aria-controls="cmdk" aria-expanded="false" aria-keyshortcuts="Control+K Meta+K"><span class="cmd-btn-l">Jump to</span><kbd class="cmd-key" id="cmdKey">Ctrl K</kbd></button>
+    <a class="btn btn-small bar-cta" href="#pilot">Pilot with us</a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+  </div>
+  <span class="bar-progress" aria-hidden="true"><i id="progress"></i></span>
+  <div class="menu" id="menu" hidden>
+    <div class="wrap menu-in">
+      <a href="#try">Try it</a>
+      <a href="#today">What runs today</a>
+      <a href="#network">Your network</a>
+      <a href="#rules">When it acts</a>
+      <a href="#numbers">Your numbers</a>
+      <a href="#faq">Questions</a>
+      <a class="btn" href="#pilot">Pilot Marcel on one machine</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top" aria-labelledby="h1">
+    <div class="hero-top">
+      <canvas class="dro" id="dro" aria-hidden="true"></canvas>
+      <canvas class="dro dro-fx" id="droFx" aria-hidden="true"></canvas>
+      <div class="wrap hero-grid">
+        <p class="dro-read" id="droRead" aria-hidden="true" hidden><span>X</span><b data-ax="x">0.00</b><span>Y</span><b data-ax="y">0.00</b><span>MM</span></p>
+        <h1 class="h1" id="h1">A stopped machine shouldn’t wait for morning.</h1>
+        <div class="hero-side">
+          <p class="lead lead-ink">Marcel is an air-gapped AI operator for American CNC shops. It reads the control’s own screen, holds the feed before a tool breaks, works from that machine’s manuals, and texts whoever is on call.</p>
+          <div class="actions">
+            <a class="btn" href="#pilot">Pilot Marcel on one machine</a>
+            <a class="btn btn-quiet" href="#try">Try it yourself</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <figure class="film" id="film">
+        <div class="film-stage">
+          <canvas class="film-glow" id="filmGlow" width="64" height="36" aria-hidden="true"></canvas>
+          <div class="film-frame">
+            <picture class="film-poster">
+              <source media="(max-width: 720px)" srcset="media/film-poster-phone.jpg" width="864" height="1080">
+              <img src="media/film-poster.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+            </picture>
+            <video id="filmVideo" muted loop playsinline preload="metadata"
+              data-desk="media/film-1080.mp4" data-phone="media/film-phone.mp4"
+              aria-describedby="log"></video>
+            <button class="film-play" id="filmPlay" type="button" hidden>Play the film</button>
+          </div>
+        </div>
+        <figcaption class="film-bar">
+          <p class="film-note">A rendered film of where Marcel is headed. Below it, you can run what works today.</p>
+          <button class="film-toggle" id="filmToggle" type="button">Pause</button>
+        </figcaption>
+        <ol class="log" id="log" aria-label="What happens in the film, beat by beat">
+          <li><button type="button" data-t="0"><span class="log-bar" aria-hidden="true"></span><span class="chip">2:14 AM</span><span class="say">Machine 3 is on part 5 of 8. Nobody is in until 6:30.</span></button></li>
+          <li><button type="button" data-t="3.25"><span class="log-bar" aria-hidden="true"></span><span class="chip">FEED HOLD</span><span class="say">The end mill is wearing out early. Marcel stops the cut before it breaks.</span></button></li>
+          <li><button type="button" data-t="8.25"><span class="log-bar" aria-hidden="true"></span><span class="chip">LOAD +70%</span><span class="say">Same cut, 70% more spindle load than part 1. The tool’s timer still says 37 minutes left.</span></button></li>
+          <li><button type="button" data-t="14.17"><span class="log-bar" aria-hidden="true"></span><span class="chip">RETIRE T02</span><span class="say">Marcel retires the worn tool, calls up the preset spare, T22, and slows the feed to 80%.</span></button></li>
+          <li><button type="button" data-t="18.83"><span class="log-bar" aria-hidden="true"></span><span class="chip">2:17 AM</span><span class="say">Part 5 restarts. The on-call phone gets a text: no need to come in.</span></button></li>
+          <li><button type="button" data-t="23.25"><span class="log-bar" aria-hidden="true"></span><span class="chip">6:10 AM</span><span class="say">All eight parts are done before the day shift.</span></button></li>
+        </ol>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec try" id="try" aria-labelledby="try-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="try-h">Run it yourself. You’re the technician.</h2>
+        <p class="lead">This is Marcel’s simulated run from November 2, redrawn in your browser. The screen is a simulated control. Marcel’s steps and its texts to the technician are copied from that run. It won’t restart the machine until you reply.</p>
+      </div>
+
+      <div class="console" id="console">
+        <div class="cs-top">
+          <ol class="cs-steps" aria-label="Jump to a step">
+            <li><button type="button" data-step="watch" aria-current="true">Watch</button></li>
+            <li><button type="button" data-step="hold">Hold</button></li>
+            <li><button type="button" data-step="explain">Explain</button></li>
+            <li><button type="button" data-step="wait">Wait for you</button></li>
+            <li><button type="button" data-step="resume">Resume</button></li>
+          </ol>
+          <div class="cs-ctrl">
+            <button type="button" class="cs-btn cs-sound" id="csSound" aria-pressed="false" title="Machine sound, off until you turn it on">
+              <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" fill="currentColor"/><path class="snd-on" d="M13 7a4 4 0 0 1 0 6M15.5 4.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="snd-off" d="M13 7.5l5 5M18 7.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>Sound</span>
+            </button>
+            <button type="button" class="cs-btn" id="csPlay" aria-keyshortcuts="K">Play</button>
+            <button type="button" class="cs-btn" id="csReplay">Start over</button>
+          </div>
+        </div>
+
+        <div class="cs-grid">
+          <div class="cs-left">
+            <div class="bezel">
+              <div class="screen" id="screen" aria-hidden="true">
+                <div class="scr-head"><span>MARCEL SCREEN LAB - SIMULATED CONTROL - S:LAB1</span></div>
+                <div class="scr-row2">
+                  <span class="scr-title" data-bind="title">POSITION ALL</span>
+                  <span class="scr-prog" data-ret="block"><span data-bind="prog">O1001 N00250</span></span>
+                  <span class="scr-clock" data-bind="clock">2026/11/02 17:09:02</span>
+                </div>
+                <div class="scr-main">
+                  <div class="scr-pages">
+                    <div class="pg pg-pos" data-page="pos">
+                      <div class="pnl">
+                        <p class="pl">ABSOLUTE</p>
+                        <div class="axes"><span>X</span><b data-bind="ax">3.9000</b><span>Y</span><b>2.7500</b><span>Z</span><b>-0.1250</b></div>
+                      </div>
+                      <div class="pnl">
+                        <p class="pl">MACHINE</p>
+                        <div class="axes"><span>X</span><b data-bind="mx">-15.9787</b><span>Y</span><b>-7.2500</b><span>Z</span><b>-12.1942</b></div>
+                      </div>
+                      <div class="pnl">
+                        <p class="pl">MODAL</p>
+                        <p class="modal">G01 G17 G90 G94<br>G20 G40 G43 G80<br>G54 G98 G15 G50.1<br>T02 H02 D00 M08</p>
+                      </div>
+                      <div class="pnl">
+                        <p class="pl">ACTUAL</p>
+                        <div class="kv"><span>ACT. FEED</span><b data-bind="actf">80.0 IN/MIN</b><span>ACT. SPINDLE</span><b>9000 RPM</b><span>CYCLE TIME</span><b data-bind="cyc">0H00M02S</b><span>PARTS COUNT</span><b>36</b></div>
+                      </div>
+                    </div>
+                    <div class="pg pg-alarm" data-page="alarm" hidden>
+                      <p class="pl">ALARM HISTORY 1-8/8 NEWEST FIRST</p>
+                      <table class="tbl">
+                        <thead><tr><th>DATE TIME</th><th>CODE</th><th>MESSAGE</th></tr></thead>
+                        <tbody>
+                          <tr data-ret="alarmrow"><td>2026/10/29 14:12:51</td><td class="r">SP9029</td><td>SSPA:29 OVERLOAD</td></tr>
+                          <tr><td>2026/10/27 09:03:17</td><td class="r">SV0401</td><td>V READY OFF</td></tr>
+                          <tr><td>2026/10/27 09:02:58</td><td class="r">SV0401</td><td>V READY OFF</td></tr>
+                          <tr><td>2026/10/22 16:40:05</td><td class="r">OT0501</td><td>- OVERTRAVEL ( SOFT 1 )</td></tr>
+                          <tr><td>2026/10/18 11:27:44</td><td class="r">PS0011</td><td>FEED ZERO (COMMAND)</td></tr>
+                          <tr><td>2026/10/14 07:55:12</td><td class="r">OH0701</td><td>FAN MOTOR STOP</td></tr>
+                          <tr><td>2026/10/09 13:18:36</td><td class="r">SV0436</td><td>SOFTTHERMAL(OVC)</td></tr>
+                          <tr><td>2026/10/02 10:44:09</td><td class="r">SP9001</td><td>SSPA:01 MOTOR OVERHEAT</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pg pg-tool" data-page="tool" hidden>
+                      <p class="pl">TOOL LIFE (COUNT BY PARTS)</p>
+                      <table class="tbl">
+                        <thead><tr><th>TOOL</th><th>DESCRIPTION</th><th>LIFE</th><th>USED</th><th>REMAIN</th><th>STATUS</th></tr></thead>
+                        <tbody>
+                          <tr><td>T01</td><td>3.0 FACE MILL</td><td>400</td><td>212</td><td>188</td><td class="g">OK</td></tr>
+                          <tr class="sel" data-ret="toolrow"><td>T02</td><td>0.5 3FL ROUGH EM</td><td>300</td><td data-bind="used">263</td><td data-bind="remain">37</td><td data-bind="tstat" class="y">LOW</td></tr>
+                          <tr><td>T03</td><td>0.375 FINISH EM</td><td>300</td><td>141</td><td>159</td><td class="g">OK</td></tr>
+                          <tr><td>T04</td><td>NO.3 CENTER DRILL</td><td>800</td><td>390</td><td>410</td><td class="g">OK</td></tr>
+                          <tr><td>T05</td><td>NO.7 DRILL 0.201</td><td>250</td><td>244</td><td>6</td><td class="y">LOW</td></tr>
+                          <tr><td>T06</td><td>1/4-20 TAP</td><td>200</td><td>88</td><td>112</td><td class="g">OK</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="scr-side">
+                    <div class="sd" data-ret="tool"><p class="pl">TOOL</p><p class="sd-tool">T02 <small>NEXT T03</small></p></div>
+                    <div class="sd" data-ret="load">
+                      <p class="pl pl-row"><span>SPINDLE LOAD</span><b><span data-bind="load">72</span><small>%</small></b></p>
+                      <div class="meter"><i data-bind="loadbar"></i><em></em></div>
+                    </div>
+                    <div class="sd kv"><span>S ACT</span><b>9000 <small>RPM</small></b><span>F ACT</span><b><span data-bind="fact">80.0</span> <small>IPM</small></b></div>
+                    <div class="sd kv sd-more"><span>FEED OVR</span><b>100<small>%</small></b><span>PARTS</span><b>36 <small>/ 50</small></b></div>
+                    <div class="sd">
+                      <p class="pl pl-row"><span>T02 LIFE LEFT</span><b><span data-bind="life">37</span> <small>PCS</small></b></p>
+                      <div class="meter meter-life"><i data-bind="lifebar"></i></div>
+                    </div>
+                    <div class="sd kv sd-more"><span>COOLANT</span><b>ON</b><span>DOOR</span><b>CLOSED</b></div>
+                  </div>
+                </div>
+                <div class="scr-modes" data-ret="mode">
+                  <span class="on" data-ret="modemem">MEM</span><span data-mode="strt" class="on">STRT</span><span data-mode="hold" data-ret="modehold">HOLD</span><span>MTN</span><span>ALM</span><span>EMG</span><span>SBK</span>
+                </div>
+                <div class="reticle" id="reticle"><i></i><i></i><i></i><i></i><span class="ret-label" id="retLabel"></span></div>
+                <div class="sweep" id="sweep"></div>
+              </div>
+            </div>
+
+            <div class="keys" aria-hidden="true">
+              <span class="key" data-key="hold">FEED HOLD</span>
+              <span class="key" data-key="page">PAGE</span>
+              <span class="key" data-key="reset">RESET COUNT</span>
+              <span class="key" data-key="start">CYCLE START</span>
+            </div>
+
+            <div class="trace">
+              <canvas id="trace" aria-label="Spindle load over the last 17 seconds, and where it was heading" role="img"></canvas>
+            </div>
+          </div>
+
+          <div class="cs-right">
+            <p class="cs-status" id="csStatus" aria-live="polite">Marcel is reading the screen.</p>
+            <ol class="cs-log" id="csLog" tabindex="0" aria-label="Marcel’s steps"></ol>
+
+            <div class="phone" id="phone" role="group" aria-label="The technician’s phone" data-view="lock">
+              <div class="ph-lock" id="phLock">
+                <p class="lk-date">Monday, November 2</p>
+                <p class="lk-time" id="lkTime">5:09</p>
+                <button type="button" class="lk-note" id="lkNote" hidden>
+                  <span class="lk-app" aria-hidden="true">M</span>
+                  <span class="lk-body">
+                    <span class="lk-head"><b>Marcel</b><small>now</small></span>
+                    <span class="lk-text">Marcel stopped the cut at 93% spindle load, about 8 s before overload. Feed held, spindle turning, no alarm, part safe.</span>
+                  </span>
+                  <img class="lk-thumb" src="media/alert-shot.jpg" alt="" width="560" height="277" loading="lazy">
+                </button>
+                <p class="lk-foot" id="lkFoot">On-call phone. Texts from the shop land here.</p>
+              </div>
+              <div class="ph-thread" id="phThread">
+                <div class="ph-top">
+                  <span class="ph-av" aria-hidden="true">M</span>
+                  <span class="ph-id"><b>Marcel</b><small>Texts from the shop</small></span>
+                </div>
+                <ol class="ph-msgs" id="phMsgs" tabindex="0" aria-label="Messages" aria-live="polite"></ol>
+                <div class="ph-reply" id="phReply" hidden>
+                  <p class="ph-hint" id="phHint">Your move. Marcel won’t restart until you reply.</p>
+                  <button type="button" class="ph-btn" id="phBtn" aria-keyshortcuts="R">Reply: Replaced T02</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <noscript><p class="cs-nojs">This console runs in your browser and needs JavaScript. The first recording below shows the same run, filmed.</p></noscript>
+        <div class="cs-foot">
+          <p class="cs-note">Redrawn from Marcel’s simulated run on November 2, 2026. Its messages are copied from that run. The control is a simulator running on an offline industrial PC. If you don’t reply, the technician answers after a few seconds so the run can finish.</p>
+          <p class="cs-keys" aria-hidden="true">In the console: <kbd>K</kbd> play or pause <kbd>←</kbd><kbd>→</kbd> steps <kbd>R</kbd> reply</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="proof" id="proof" aria-labelledby="proof-h">
+    <div class="wrap">
+      <h2 class="eyebrow" id="proof-h">Measured so far</h2>
+      <div class="proof-grid">
+        <div class="stat">
+          <p class="stat-n" data-odo>8 s</p>
+          <p class="stat-t">early. In the simulated run, Marcel held the feed about 8 seconds before the spindle would have overloaded.</p>
+          <div class="stat-viz" data-viz="early" aria-hidden="true"></div>
+        </div>
+        <div class="stat">
+          <p class="stat-n" data-odo>6–11 s</p>
+          <p class="stat-t">from an alarm to a cited fix on the technician’s phone, measured end to end in simulation.</p>
+          <div class="stat-viz" data-viz="window" aria-hidden="true"></div>
+        </div>
+        <div class="stat">
+          <p class="stat-n" data-odo>2,100+</p>
+          <p class="stat-t">manual pages indexed, so every answer can point to a page.</p>
+          <div class="stat-viz" data-viz="pages" aria-hidden="true"></div>
+        </div>
+        <div class="stat">
+          <p class="stat-n" data-odo>0</p>
+          <p class="stat-t">invented citations across 16 test answers from a local model. A line without a source is removed.</p>
+          <div class="stat-viz" data-viz="cites" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="today" aria-labelledby="today-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="today-h">The recordings.</h2>
+        <p class="lead">Three recordings from November 2, 2026, with no sound. Each one says on screen what it shows, and when it’s sped up.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Recordings">
+        <button class="tab" role="tab" id="tab-loop" aria-controls="panel-loop" aria-selected="true" type="button"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Full loop<span class="len">1:04</span></button>
+        <button class="tab" role="tab" id="tab-watch" aria-controls="panel-watch" aria-selected="false" tabindex="-1" type="button"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Watch only<span class="len">0:39</span></button>
+        <button class="tab" role="tab" id="tab-mill" aria-controls="panel-mill" aria-selected="false" tabindex="-1" type="button"><span class="lamp" data-state="real" aria-hidden="true"><i></i><i></i><i></i></span>Real mill<span class="len">0:50</span></button>
+      </div>
+
+      <div class="panel" id="panel-loop" role="tabpanel" aria-labelledby="tab-loop">
+        <div class="clip-frame"><video controls muted playsinline preload="none" poster="media/today-loop.jpg"><source src="media/today-loop.mp4" type="video/mp4"></video></div>
+        <div class="panel-text">
+          <p class="state"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Working in simulation, on real hardware</p>
+          <p>The run you just played, filmed. An offline industrial PC runs a simulated CNC control, and Marcel works it through a small capture-and-keyboard device.</p>
+          <p>It sees spindle load climbing, pauses the cut, checks tool life and alarm history, texts the technician, then resets the counter and confirms the machine is running.</p>
+        </div>
+      </div>
+      <div class="panel" id="panel-watch" role="tabpanel" aria-labelledby="tab-watch" hidden>
+        <div class="clip-frame"><video controls muted playsinline preload="none" data-poster="media/today-watch.jpg"><source src="media/today-watch.mp4" type="video/mp4"></video></div>
+        <div class="panel-text">
+          <p class="state"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Working in simulation, on real hardware</p>
+          <p>In watch-only mode Marcel presses nothing. This is how a real machine starts.</p>
+          <p>When the spindle overloads and the machine alarms, the technician asks what happened. Marcel explains the alarm and how to recover. Parts of this clip run at 4× speed, and the screen says so.</p>
+        </div>
+      </div>
+      <div class="panel" id="panel-mill" role="tabpanel" aria-labelledby="tab-mill" hidden>
+        <div class="clip-frame"><video controls muted playsinline preload="none" data-poster="media/today-mill.jpg"><source src="media/today-mill.mp4" type="video/mp4"></video></div>
+        <div class="panel-text">
+          <p class="state"><span class="lamp" data-state="real" aria-hidden="true"><i></i><i></i><i></i></span>Working on a real machine, from a phone</p>
+          <p>A ProtoTRAK RMX mill at a university machine shop, stopped by a fault. Nothing was installed on it.</p>
+          <p>A technician sent Marcel a photo of the screen. Marcel asked for the nameplate, identified the exact machine, and replied with fix steps from the maker’s manual, with page numbers.</p>
+        </div>
+      </div>
+
+      <div class="standing">
+        <h3 class="h3">Where each part stands</h3>
+        <ul class="status">
+          <li>
+            <span class="lamp" data-state="real" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="st">Working on a real machine</p>
+            <p>Reading a fault from a phone photo and answering from the maker’s manual, with page numbers. ProtoTRAK RMX, November 2, 2026.</p>
+          </li>
+          <li>
+            <span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="st">Working in simulation</p>
+            <p>Reading the screen live, holding the feed, checking tool life and alarm history, texting the technician, and resetting the counter after the fix. A real capture-and-keyboard device and a simulated control.</p>
+          </li>
+          <li>
+            <span class="lamp" data-state="next" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="st">Next</p>
+            <p>A read-only install on a real CNC control at a university machine shop, pending sign-off. Marcel will watch and alert. It won’t press anything.</p>
+          </li>
+          <li>
+            <span class="lamp" data-state="part" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="st">Partly working: running offline</p>
+            <p>Running with no internet. Diagnosis already runs on a local model. The agent still calls a cloud AI model today, and moving it onto the box in your shop is next.</p>
+          </li>
+          <li>
+            <span class="lamp" data-state="part" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="st">Partly working: manuals</p>
+            <p>Manuals for two controls are indexed with page citations, including the ProtoTRAK RMX pack. Haas NGC and Siemens 828D are in research. Marcel is designed to work across brands and ages of controls.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="network" aria-labelledby="network-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="network-h">Your control stays off the network.</h2>
+        <p class="lead">Marcel works a machine the way an operator does. It looks at the screen and uses the keyboard port. The control is never networked, and nothing is installed on it.</p>
+      </div>
+
+      <figure class="bench">
+        <img src="media/rig-2400.jpg" srcset="media/rig-1200.jpg 1200w, media/rig-2400.jpg 2400w" sizes="(max-width: 1360px) 100vw, 1320px" width="2400" height="1350" loading="lazy" decoding="async"
+          alt="The test bench: a laptop labeled HOST (MARCEL), a monitor labeled SIMULATED CNC SCREEN, a small HDMI splitter, a small capture-and-keyboard device, and a fanless industrial PC labeled AIR GAPPED, NO NETWORK.">
+        <figcaption>The test bench on November 2, 2026. Every box is labeled by hand. The industrial PC plays the part of the CNC control.</figcaption>
+      </figure>
+
+      <ul class="labels">
+        <li><img src="media/label-screen.jpg" alt="Tape label: SIMULATED CNC SCREEN" width="483" height="160" loading="lazy"><p>The operator’s screen. It keeps its picture the whole time.</p></li>
+        <li><img src="media/label-splitter.jpg" alt="Tape labels: HDMI SPLITTER, OUT, IN" width="296" height="160" loading="lazy"><p>Sends one copy of the picture to the screen and one to Marcel.</p></li>
+        <li><img src="media/label-device.jpg" alt="Tape label: USB KVM" width="524" height="160" loading="lazy"><p>The capture-and-keyboard device. Video comes in. Keys go out like a plain USB keyboard.</p></li>
+        <li><img src="media/label-pc.jpg" alt="Tape labels: INDUSTRIAL PC, AIR GAPPED, NO NETWORK" width="279" height="160" loading="lazy"><p>Stands in for the CNC control. No network cable and no new software.</p></li>
+        <li><img src="media/label-host.jpg" alt="Tape label: HOST (MARCEL)" width="342" height="160" loading="lazy"><p>Where Marcel runs. For the first real install, a small box next to the machine takes its place.</p></li>
+      </ul>
+
+      <div class="flow">
+        <svg class="wires" viewBox="0 0 404 404" role="img" aria-labelledby="wires-t wires-d">
+          <title id="wires-t">What connects to what</title>
+          <desc id="wires-d">The CNC control sends video over HDMI to a splitter. The splitter feeds the operator’s screen and a copy to the capture-and-keyboard device, which passes it to Marcel. Marcel sends keystrokes back through the device into the control's USB port. Marcel texts the on-call phone. The control has no connection to the shop network.</desc>
+          <g class="w">
+            <path d="M130 70 V120"/>
+            <path d="M220 142 H252"/>
+            <path d="M130 164 V212"/>
+            <path d="M130 268 V316"/>
+            <path class="w-keys" d="M64 316 V240 H22 V46 H40"/>
+            <path class="w-text" d="M220 340 H252"/>
+            <path class="w-cut" d="M220 46 H266"/>
+          </g>
+          <g class="pulse-paths" aria-hidden="true">
+            <path id="p-video" d="M130 70 V316"/>
+            <path id="p-screen" d="M220 142 H252"/>
+            <path id="p-keys" d="M64 316 V240 H22 V46 H40"/>
+            <path id="p-text" d="M220 340 H252"/>
+          </g>
+          <g class="pulses" aria-hidden="true">
+            <circle class="pulse" r="3"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#p-video"/></animateMotion></circle>
+            <circle class="pulse" r="3"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite"><mpath href="#p-video"/></animateMotion></circle>
+            <circle class="pulse" r="2.5"><animateMotion dur="1.3s" repeatCount="indefinite"><mpath href="#p-screen"/></animateMotion></circle>
+            <circle class="pulse pulse-amber" r="3"><animateMotion dur="3.4s" begin="0.6s" repeatCount="indefinite"><mpath href="#p-keys"/></animateMotion></circle>
+            <circle class="pulse pulse-amber" r="2.5"><animateMotion dur="2.2s" begin="1s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.45;1" calcMode="linear"><mpath href="#p-text"/></animateMotion></circle>
+          </g>
+          <g class="n">
+            <rect x="40" y="22" width="180" height="48"/>
+            <text x="56" y="51">CNC control</text>
+            <rect x="40" y="120" width="180" height="44"/>
+            <text x="56" y="147">HDMI splitter</text>
+            <rect x="252" y="120" width="146" height="44"/>
+            <text x="264" y="147">Operator’s screen</text>
+            <rect x="40" y="212" width="180" height="56"/>
+            <text x="56" y="236">Capture-and-keyboard</text>
+            <text x="56" y="256">device</text>
+            <rect class="n-marcel" x="40" y="316" width="180" height="48"/>
+            <text class="t-marcel" x="56" y="345">Marcel</text>
+            <rect x="252" y="316" width="146" height="48"/>
+            <text x="264" y="345">On-call phone</text>
+          </g>
+          <g class="cut" aria-hidden="true">
+            <path d="M237 39 l10 14 M247 39 l-10 14"/>
+          </g>
+          <g class="m">
+            <text x="272" y="44">Shop network</text>
+            <text class="m-small" x="272" y="60">not connected</text>
+            <text class="m-small" x="138" y="100">HDMI</text>
+            <text class="m-small" x="138" y="194">copy</text>
+            <text class="m-small" x="138" y="298">video</text>
+            <text class="m-small" x="72" y="300">keys</text>
+            <text class="m-small" x="226" y="380">texts out</text>
+            <text class="m-small m-vert" x="14" y="150" transform="rotate(-90 14 150)">USB keyboard</text>
+          </g>
+        </svg>
+
+        <div class="flow-text">
+          <h3 class="h3">What leaves the building</h3>
+          <p>Today, two things: the texts to your phone, and what Marcel sends to a cloud AI model while it works out what happened. Diagnosis already runs on a local model.</p>
+          <p>Next, the whole agent moves onto the box in your shop. Then only the texts leave.</p>
+          <p>Nothing reaches the control except keystrokes, the same keys an operator would press, and only from a short reviewed list.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="rules-h">When Marcel acts, and when it won’t.</h2>
+        <p class="lead">Trust is earned one step at a time, on each machine. A real machine starts on the first step.</p>
+      </div>
+
+      <div class="ladder-wrap" id="ladder">
+      <span class="rail" aria-hidden="true"><span class="rail-fill"></span></span>
+      <ol class="ladder">
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <p class="step-n">Step 1</p>
+          <div class="step-body">
+            <h3 class="h3">Watch</h3>
+            <p>Reads the screen, explains alarms and texts the technician. Presses nothing.</p>
+          </div>
+          <p class="step-state"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Working in simulation. First real machine next.</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <p class="step-n">Step 2</p>
+          <div class="step-body">
+            <h3 class="h3">Stop</h3>
+            <p>If a cut is going wrong, Marcel holds the feed right away. Stopping is the safe direction, so it doesn’t wait for anyone.</p>
+          </div>
+          <p class="step-state"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Working in simulation</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <p class="step-n">Step 3</p>
+          <div class="step-body">
+            <h3 class="h3">Ask</h3>
+            <p>Anything that restarts or changes the machine waits for a technician’s yes. Marcel checks the screen after every key it presses.</p>
+          </div>
+          <p class="step-state"><span class="lamp" data-state="sim" aria-hidden="true"><i></i><i></i><i></i></span>Working in simulation</p>
+        </li>
+        <li class="step step-later">
+          <span class="step-dot" aria-hidden="true"></span>
+          <p class="step-n">Step 4</p>
+          <div class="step-body">
+            <h3 class="h3">Repeat what worked</h3>
+            <p>Most stops repeat. A fix your shop has approved and seen work can become automatic, machine by machine. The film shows this step.</p>
+          </div>
+          <p class="step-state"><span class="lamp" data-state="next" aria-hidden="true"><i></i><i></i><i></i></span>Planned</p>
+        </li>
+      </ol>
+      </div>
+
+      <p class="never">At every step, Marcel never jogs an axis, edits a program, or changes an offset or a parameter.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="numbers" aria-labelledby="numbers-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="numbers-h">What a stopped night costs you.</h2>
+        <p class="lead">When an alarm hits after hours, the machine usually waits for the morning shift. These are example numbers. Move them to match your shop.</p>
+      </div>
+
+      <div class="calc">
+        <form class="calc-in" id="calc" onsubmit="return false">
+          <div class="field">
+            <label for="rate">Shop rate per machine hour</label>
+            <output id="rateOut" for="rate" aria-live="off">$150</output>
+            <input type="range" id="rate" name="rate" min="50" max="400" step="5" value="150">
+          </div>
+          <div class="field">
+            <label for="hours">Hours a stopped machine waits</label>
+            <output id="hoursOut" for="hours" aria-live="off">6 h</output>
+            <input type="range" id="hours" name="hours" min="1" max="14" step="1" value="6">
+          </div>
+          <div class="field">
+            <label for="stops">Stops after hours, per month</label>
+            <output id="stopsOut" for="stops" aria-live="off">4</output>
+            <input type="range" id="stops" name="stops" min="1" max="30" step="1" value="4">
+          </div>
+        </form>
+        <div class="calc-out">
+          <p class="sr-only" id="calcSay" aria-live="polite"></p>
+          <div class="calc-live">
+            <p class="total"><span id="monthly">$3,600</span></p>
+            <p class="total-label">a month in spindle time, waiting for morning</p>
+            <p class="calc-year"><span id="yearly">$43,200</span> a year, over <span id="nights">48</span> stopped nights</p>
+          </div>
+          <figure class="year">
+            <canvas id="yearGrid" aria-hidden="true"></canvas>
+            <figcaption class="year-cap"><span class="year-key" aria-hidden="true"></span>Each square is a night of the year. Red ones are nights a machine waits for morning, spread at random.</figcaption>
+          </figure>
+          <p class="calc-math" id="math">$150 × 6 h × 4 stops</p>
+          <a class="btn" href="#pilot">Pilot Marcel on one machine</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq" aria-labelledby="faq-h">
+    <div class="wrap faq-grid">
+      <div class="sec-head faq-head">
+        <h2 class="h2" id="faq-h">Questions shops ask first.</h2>
+        <p class="lead">Short answers. Ask us anything else.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Does Marcel put my machines on the internet?</summary>
+          <div class="faq-a">
+            <p>No. The control never goes on a network. Marcel reads its screen through a splitter and sends keys like a plain USB keyboard.</p>
+            <p>Today, the box Marcel runs on sends texts and calls a cloud AI model. Next, the agent moves onto the box, and only the texts leave the building.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Will it jog an axis or change my programs?</summary>
+          <div class="faq-a">
+            <p>No. Marcel never jogs an axis, edits a program, or changes an offset or a parameter.</p>
+            <p>Its actions come from a short reviewed list, like holding the feed or opening a page. After a technician approves, it can reset a tool counter and press cycle start, which runs your program as written.</p>
+          </div>
+        </details>
+        <details>
+          <summary>What if Marcel gets it wrong?</summary>
+          <div class="faq-a">
+            <p>Real machines start read-only. Stopping is the only thing Marcel does on its own, because stopping is the safe direction.</p>
+            <p>Anything that restarts or changes the machine waits for a technician’s yes, and Marcel checks the screen after every key. When Marcel explains an alarm, every line cites a manual page, or it’s removed. With no alarm, as in the run above, it says it has no manual source.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Which controls does it work with?</summary>
+          <div class="faq-a">
+            <p>Marcel is designed to work across brands and ages of controls. It reads the screen the operator already uses. How it presses keys depends on the control, so that is checked on each machine before Marcel presses anything.</p>
+            <p>Manuals ready today: two controls, including ProtoTRAK RMX. Haas NGC and Siemens 828D are in research.</p>
+          </div>
+        </details>
+        <details>
+          <summary>How is this different from machine monitoring?</summary>
+          <div class="faq-a">
+            <p>Monitoring tells you a machine stopped, usually over the shop network or through added sensors.</p>
+            <p>Marcel reads the control’s own screen without putting the control on a network, holds the feed before damage, explains the alarm from the manual, and texts the fix.</p>
+          </div>
+        </details>
+        <details>
+          <summary>What does a pilot look like?</summary>
+          <div class="faq-a">
+            <p>One machine, read-only to start. A small box sits next to the machine, and a splitter goes on the screen cable.</p>
+            <p>Unplugging the splitter puts the machine back exactly as it was.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="dawn" id="pilot" aria-labelledby="pilot-h">
+    <picture class="dawn-bg">
+      <source media="(max-width: 720px)" srcset="media/dawn-960.jpg">
+      <img src="media/dawn-1920.jpg" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+    </picture>
+    <div class="wrap dawn-grid">
+      <div class="pilot">
+        <h2 class="h2" id="pilot-h">Pilot Marcel on one machine.</h2>
+        <p class="lead lead-ink">Run machines at night or short-handed? Tell us about one machine: its control, how old it is, and when it runs with nobody around. We’ll tell you plainly where Marcel stands for it.</p>
+        <div class="actions">
+          <a class="btn" href="mailto:hello@marcelcnc.com?subject=Pilot%20Marcel%20on%20one%20machine&amp;body=Shop%3A%0AMachine%20and%20control%20(brand%2C%20model%2C%20year)%3A%0AWhen%20it%20runs%20with%20nobody%20around%3A%0AWhat%20usually%20stops%20it%3A%0A">Email about a pilot</a>
+          <button class="copy" type="button" data-copy="hello@marcelcnc.com"><span class="addr">hello@marcelcnc.com</span><span class="copy-state" aria-live="polite">Copy</span></button>
+        </div>
+      </div>
+      <aside class="founder" aria-labelledby="founder-h">
+        <h3 class="h3" id="founder-h">Why I’m building Marcel</h3>
+        <p>My dad has run CNC machines his whole career. At 18 I worked in a job shop and built its inventory system for more than 1,000 fixtures.</p>
+        <p>At IMTS this year I talked with about a hundred people in the industry and heard the same thing over and over. When a machine stops at night, it waits for the one person who knows how to fix it, and those people are retiring faster than new ones come in.</p>
+        <p>I study the security of machines like these. That’s why Marcel uses the screen and keyboard a machine already has, and never puts a control on a network.</p>
+        <p class="sig">Shawn Casey, founder</p>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-mark-big">
+    <canvas class="wordmark" id="wordmark" aria-hidden="true"></canvas>
+  </div>
+  <div class="wrap foot-in">
+    <p class="foot-note">The film at the top is rendered and shows where Marcel is headed. The console is redrawn from a simulated run, with Marcel’s real messages. The recordings are real: a simulated control on real hardware, and a real mill photographed with a phone on November 2, 2026.</p>
+    <p class="foot-meta">hello@marcelcnc.com<br>© 2026 Marcel</p>
+  </div>
+</footer>
+
+<div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-labelledby="cmdkTitle" hidden>
+  <div class="cmdk-scrim" data-close></div>
+  <div class="cmdk-box">
+    <p class="cmdk-title" id="cmdkTitle">Jump to anything on this page</p>
+    <div class="cmdk-field">
+      <span class="cmdk-pre" aria-hidden="true">MDI&gt;</span>
+      <input id="cmdkInput" type="text" role="combobox" aria-expanded="true" aria-controls="cmdkList" aria-autocomplete="list" aria-labelledby="cmdkTitle" aria-describedby="cmdkHelp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type a section, a question or a command">
+      <button type="button" class="cmdk-esc" data-close>Esc</button>
+    </div>
+    <ul class="cmdk-list" id="cmdkList" role="listbox" aria-label="Results"></ul>
+    <p class="cmdk-empty" id="cmdkEmpty" hidden>Nothing matches. Try “network”, “sound” or “pilot”.</p>
+    <p class="sr-only" id="cmdkStatus" role="status"></p>
+    <p class="cmdk-foot" id="cmdkHelp"><span><kbd>↑</kbd><kbd>↓</kbd> to move</span><span><kbd>Enter</kbd> to go</span><span><kbd>Esc</kbd> to close</span></p>
+  </div>
+</div>
+
+<!--JS-->
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
+<script src="assets/vendor/ScrambleTextPlugin.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/site.js" defer></script>
+<script src="assets/fx.js" defer></script>
+<script src="assets/console.js" defer></script>
+<script src="assets/palette.js" defer></script>
+<!--/JS-->
+</body>
+</html>

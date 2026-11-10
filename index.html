@@ -161,6 +161,14 @@
         <h3 class="h-small">What leaves the building</h3>
         <p><strong>The control: nothing.</strong> It never gets a network connection. “Air-gapped” means the control.</p>
         <p><strong>Marcel’s box, today:</strong> the messages to your phone, and what Marcel sends to a cloud AI model while it works out what happened. Diagnosis already runs on a local model.</p>
+        <p><strong>Planned for pilots:</strong></p>
+        <ul class="leaves-plan">
+          <li>The box brings its own cellular connection, so it never joins your network.</li>
+          <li>The box starts every connection. Replies and setting changes come back over it, and nothing on the internet can connect in.</li>
+          <li>The cloud model gets text read off the screen, like the alarm, block, load and tool numbers. Never screenshots, video, programs, drawings or offsets.</li>
+          <li>Images from around an alarm stay on the box for 30 days, and logs for 90.</li>
+          <li>For shops that can’t use the internet, an offline mode still holds the feed and keeps the log, and sends nothing.</li>
+        </ul>
         <p><strong>Next,</strong> the whole agent moves onto the box in your shop. Then only the messages leave.</p>
         <p>Nothing reaches the control except keystrokes, the same keys an operator would press, from a short reviewed list, and only after the shop signs off on that machine.</p>
       </div>
@@ -415,12 +423,24 @@
       </details>
       <details>
         <summary>What happens if nobody answers?</summary>
-        <p>The machine stays in feed hold, and nothing restarts until a person replies. Before a pilot, we agree with you what should happen if nobody does.</p>
+        <p>The machine stays in feed hold, and nothing restarts until a person replies.</p>
+        <p>The plan: the person on call gets a message at once and another at 5 minutes. The next person on your list hears at 10 minutes, and the owner at 20. If you allow it at sign-off, Marcel stops the spindle with the control’s own key after 15 minutes. Otherwise the machine waits in hold.</p>
       </details>
       <details>
         <summary>What stops the keyboard device from typing anything else?</summary>
         <p>Marcel only sends keys from a short reviewed list, like feed hold or a page key, and checks the screen after each one. A real machine starts read-only, with no keyboard connection, until the shop signs off on that machine.</p>
+        <p>The plan is to enforce the list twice: in Marcel’s software, and in the keyboard device’s own firmware, which drops and logs any other key. Then even a compromised box couldn’t type outside the list. Keys ship switched off, the device has a physical switch, and the list can only be changed in setup, at the machine.</p>
         <p>On some controls, feed hold and cycle start are panel buttons a keyboard can’t press. We check that before a pilot. Where it can’t, Marcel watches and texts.</p>
+      </details>
+      <details>
+        <summary>If my technician can text back, isn’t that a way in?</summary>
+        <p>The plan: the box brings its own cellular connection, so it never joins your network. Your Wi-Fi or Ethernet is used only if your IT prefers it.</p>
+        <p>The box starts every connection and holds it open. Replies, setting changes and updates come back over that connection, the way a phone gets its messages. Nothing on the internet can open a connection to the box: no open ports and no port forwarding.</p>
+      </details>
+      <details>
+        <summary>Can you change settings from outside the shop?</summary>
+        <p>The plan: only who’s on call, how long before the next person hears, quiet hours, and software updates. Every change is signed by us, logged on the box and shown to your shop. There’s no remote shell.</p>
+        <p>The allowed keys can only change at the machine, with the device’s switch set to setup and your sign-off. So no one off site, including us, can widen what Marcel can press. If deeper support is ever needed, someone at your shop turns it on at the box for a set time, and it closes by itself.</p>
       </details>
       <details>
         <summary>My control’s screen is built in. Where does the splitter go?</summary>
@@ -428,8 +448,8 @@
       </details>
       <details>
         <summary>What does a pilot look like?</summary>
-        <p>One machine, read-only to start. A small box sits next to the machine, and a splitter goes on the screen cable. You tell us who’s on call, and Marcel messages them.</p>
-        <p>Unplugging the splitter puts the machine back exactly as it was.</p>
+        <p>The plan: one machine for 30 days. We install it in under an hour during a planned stop. A splitter goes on the screen cable, and the box sits beside the machine on its own cellular link. There’s no IT work, and nothing is installed on the control.</p>
+        <p>For the first 14 days, Marcel only watches and messages whoever is on call. It presses no keys. At day 14, you decide whether it may hold the feed. At day 30, we go through your own numbers, like stops caught and how fast someone responded. Then you keep it, or we unplug it and the machine is exactly as it was.</p>
       </details>
     </div>
   </div>

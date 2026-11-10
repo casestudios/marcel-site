@@ -10,3 +10,7 @@
 
 # tooling
 node_modules/
+
+node_modules/
+_film/renders/
+_film/.hyperframes/

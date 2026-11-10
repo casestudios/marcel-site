@@ -1,33 +1,26 @@
 # marcelcnc.com
 
-The Marcel website: one static page with no build step.
+Static site, no build step on deploy. Vercel serves the repo root; `.vercelignore` keeps `_src`, `_film` and this README off the live site.
 
-## Run it locally
+## v5: machined monochrome
+- **The stage.** A real-time 3D model of T02, the 1/2" three-flute rougher from Marcel's simulated run on November 2, 2026, in a CAT40 ER32 holder. Every part is built in code from real dimensions (`_src/shared/tool3d.js`); there are no 3D asset files. Scrolling runs the story: the load climbs, Marcel holds the feed, the tool opens up with Marcel's likely causes plotted on it, then the on-call phone. Replying restarts the cut.
+- **The drawing.** "Your control stays off the network" is an isometric parts drawing generated as SVG (`_src/tools/drawing.mjs`) and plotted stroke by stroke in Hershey Simplex lettering. Hovering a row of the parts list highlights the part.
+- **Plates.** `media/knoll*.webp` and `media/stand*.webp` are stills rendered from the same 3D model. `media/t02-*.webp` are the first-paint and reduced-motion posters.
+- **Type.** Mona Sans and Hubot Sans (GitHub, OFL), Martian Mono (OFL) for data only, Hershey Simplex for plotted labels. All self-hosted.
+- **Motion rules.** Nothing moves on its own with reduced motion on; the 3D is replaced by posters. The 3D renders only while it is on screen.
 
-    python3 -m http.server 8000
+## Rebuild
+```sh
+cd _src && npm ci && node build.mjs
+```
+This regenerates `index.html`, `assets/js`, `assets/css` and `assets/fonts` at the repo root.
 
-Then open http://localhost:8000. Opening `index.html` straight from the file system works too, but browsers block web fonts there, so the type falls back to Arial.
+## The teaser film (`_film`)
+A 25-second HyperFrames composition that reuses the same 3D module. Render it with:
+```sh
+cd _film && npx hyperframes render --output renders/marcel-teaser.mp4
+```
+Open it in the HyperFrames desktop app to edit the cards (they are composition variables).
 
-## Deploy
-
-Pushing to `main` deploys to production on Vercel. `vercel.json` tells Vercel this is a plain static site with no framework and no build. To undo a deploy, use Instant Rollback on the previous deployment in the Vercel dashboard.
-
-## What's where
-
-- `index.html`: the page and all of its copy.
-- `assets/site.css`: all of the page's style.
-- `assets/site.js`: the header, smooth scrolling, the film and its log, the recording tabs, the ladder and the phone menu.
-- `assets/fx.js`: the effects:
-  - the hero's scan and toolpath;
-  - the film's glow;
-  - the night clock;
-  - the rolling numbers and charts;
-  - the calculator;
-  - the machined wordmark.
-- `assets/console.js`: the "Run it yourself" console, a redraw of the November 2, 2026 simulated run. Marcel's two texts are copied word for word from that run.
-- `assets/palette.js`: the command menu (Cmd K or Ctrl K).
-- `assets/vendor/`: GSAP 3.13.0 (with ScrollTrigger, SplitText and ScrambleTextPlugin) and Lenis 1.1.13.
-- `assets/fonts/`: self-hosted Barlow, Barlow Semi Condensed and IBM Plex Mono (SIL Open Font License).
-- `media/`: the film, the recordings, the photos and the posters.
-
-The previous Next.js version of the site is in this repository's history.
+## Honesty rules (unchanged)
+Present tense only for what works. The film is labelled as where Marcel is headed. No customers, quotes, logos, prices or invented metrics. Calculator numbers are labelled as examples.

@@ -15,7 +15,7 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 /* ---------------- smooth scroll (desktop pointers only) ---------------- */
 let lenis = null;
 if (!reduce && !coarse) {
-  lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.9, anchors: { offset: -72 } });
+  lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.9, anchors: { offset: -72 } });
   const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
   requestAnimationFrame(raf);
 }
@@ -115,7 +115,8 @@ function story(u) {
     block: 'N270',
     scene: u >= 3.5 && u < studioEnd ? 'studio' : 'shop',
     studioEnd,
-    fade: Math.max(0, 1 - Math.abs(u - 3.5) / 0.09, 1 - Math.abs(u - studioEnd) / 0.09),
+    // a soft dip to black between the machine and the studio, not a flash
+    fade: smooth(Math.max(0, 1 - Math.abs(u - 3.5) / 0.15, 1 - Math.abs(u - studioEnd) / 0.15)),
     explode: range(u, 3.55, 3.95) * (1 - smooth(range(u, A.c[2] - 0.06, A.c[2] + 0.2))),
     packed: range(u, A.c[1] - 0.05, A.c[1] + 0.2),
     dim: range(u, A.phone - 0.5, A.phone - 0.15) * 0.74,
@@ -412,11 +413,24 @@ async function startGL() {
   } catch (e) { console.warn(e); return false; }
 
   let W = 0, H = 0, tall = false;
+  // resolution follows the machine: start sharp, drop a step if frames run long, climb back when there's headroom
+  const DPR_MAX = Math.min(devicePixelRatio || 1, quality === 'low' ? 1.5 : 2), DPR_MIN = Math.min(1, DPR_MAX);
+  let dprScale = quality === 'low' ? 1 : 0.85, ema = 16, lastAdapt = 0;
+  const dprNow = () => Math.max(DPR_MIN, DPR_MAX * dprScale);
+  function adapt(rawMs, now) {
+    ema += (rawMs - ema) * 0.08;
+    if (now - lastAdapt < 1500) return;
+    lastAdapt = now;
+    const before = dprScale;
+    if (ema > 24 && dprScale > 0.6) dprScale -= 0.1;
+    else if (ema < 13 && dprScale < 1) dprScale += 0.05;
+    if (dprScale !== before) st.resize(W, H, dprNow());
+  }
   const fitCache = {};
   function size() {
     W = canvas.clientWidth; H = canvas.clientHeight; tall = W / H < 0.8;
     for (const k of Object.keys(fitCache)) delete fitCache[k];
-    st.resize(W, H, Math.min(devicePixelRatio || 1, quality === 'low' ? 1.5 : 1.6));
+    st.resize(W, H, dprNow());
     calloutSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   }
   size();
@@ -496,6 +510,7 @@ async function startGL() {
     running = false;
     if (!visible) return;
     const raw = Math.max(0, (now - last) / 1000), dt = Math.min(0.05, raw); last = now; t += dt;
+    if (!POSTER && raw < 0.25) adapt(raw * 1000, now);
     if (POSTER) t = Number(qs.get('t') || 9.4);
     const u = stageU(), sv = story(u);
     if (u < 1.3 && replied) resetPhone();

@@ -97,9 +97,9 @@ export function buildDrawing(variant = 'wide') {
   // place by screen intent: h = across (right), v = down/depth; z lifts up
   const at = (h, v, z) => [(h + v) / 2, (v - h) / 2, z];
   const P = W ? {
-    control: at(-470, -40, 0), splitter: at(-150, 250, 40), capture: at(30, 300, 30), box: at(230, 280, 0), phone: at(470, 150, 20),
+    control: at(-470, -40, 0), splitter: at(-150, 250, 40), capture: at(30, 300, 30), box: at(30, 250, 0), phone: at(470, 150, 20),
   } : {
-    control: at(-70, -60, 0), splitter: at(-130, 330, 0), capture: at(70, 410, 0), box: at(60, 610, 0), phone: at(-190, 690, 0),
+    control: at(-70, -60, 0), splitter: at(-130, 330, 0), capture: at(70, 410, 0), box: at(-10, 470, 0), phone: at(-190, 690, 0),
   };
   P.screen = [P.control[0], P.control[1] + 104, P.control[2] + 70];
   const items = {};
@@ -129,17 +129,17 @@ export function buildDrawing(variant = 'wide') {
   // 3 the operator's screen, exploded forward off the pendant
   {
     const [x, y, z] = P.screen;
-    const b = box(x + 16, y, z + 20, 118, 8, 136, 3);
+    const b = box(x + 16, y, z + 20, 118, 8, 136, 1);
     items.screen = b;
-    rectOn(b, 'y', 8, 10, 102, 116, 'det', 3);
+    rectOn(b, 'y', 8, 10, 102, 116, 'det', 1);
     // a few lines of screen text
-    for (let i = 0; i < 6; i++) lineOn(b, 'y', 16, 112 - i * 13, 16 + (i % 3 === 0 ? 70 : 50 + (i * 7) % 30), 112 - i * 13, 'scr', 3);
+    for (let i = 0; i < 6; i++) lineOn(b, 'y', 16, 112 - i * 13, 16 + (i % 3 === 0 ? 70 : 50 + (i * 7) % 30), 112 - i * 13, 'scr', 1);
     // the screen's HDMI input on its underside edge (+x face)
-    port(b, 'x', 1, 10, 6, 10, 3);
+    port(b, 'x', 1, 10, 6, 10, 1);
     items.screenIn = pointOn(b, 'x', 4, 14);
   }
-  // 2 splitter
-  {
+  // the splitter and the capture-and-keyboard device live inside Marcel's enclosure, so they aren't drawn
+  if (false) {
     const [x, y, z] = P.splitter;
     const b = box(x, y, z, 60, 52, 18, 2);
     items.splitter = b;
@@ -150,8 +150,7 @@ export function buildDrawing(variant = 'wide') {
     items.splOut1 = pointOn(b, 'x', 15, 9);
     items.splOut2 = pointOn(b, 'x', 37, 9);
   }
-  // 4 capture-and-keyboard device
-  {
+  if (false) {
     const [x, y, z] = P.capture;
     const b = box(x, y, z, 46, 46, 15, 4);
     items.capture = b;
@@ -165,96 +164,72 @@ export function buildDrawing(variant = 'wide') {
   // 5 Marcel's box: heat-sink fins on top
   {
     const [x, y, z] = P.box;
-    const b = box(x, y, z, 110, 86, 34, 5);
+    const b = box(x, y, z, 150, 112, 54, 2);
     items.box = b;
-    for (let i = 0; i < 9; i++) lineOn(b, 'top', 10 + i * 11, 10, 10 + i * 11, 76, 'det', 5);
-    rectOn(b, 'y', 12, 10, 12, 6, 'det', 5);
-    rectOn(b, 'y', 30, 10, 12, 6, 'det', 5);
-    items.boxIn = pointOn(b, 'y', 18, 13);
-    items.boxAnt = [b.x1 - 10, b.y0 + 10, b.z1];
-    // antenna
-    poly3([[b.x1 - 10, b.y0 + 10, b.z1], [b.x1 - 10, b.y0 + 10, b.z1 + 46]], 'obj', 5);
+    // a lid seam and a recessed panel on top: one sealed enclosure, nothing to open
+    lineOn(b, 'y', 0, 44, 150, 44, 'det', 2); lineOn(b, 'x', 0, 44, 112, 44, 'det', 2);
+    rectOn(b, 'top', 16, 16, 118, 80, 'det', 2);
+    // a single status light on the face
+    rectOn(b, 'y', 128, 22, 8, 8, 'scr', 2);
+    items.boxIn = pointOn(b, 'y', 22, 18);
+    items.boxKeys = pointOn(b, 'y', 50, 18);
+    items.boxAnt = [b.x1 - 12, b.y0 + 12, b.z1];
   }
   // 6 the phone, standing, screen facing +y
   {
     const [x, y, z] = P.phone;
-    const b = box(x, y, z, 64, 7, 130, 6);
+    const b = box(x, y, z, 64, 7, 130, 3);
     items.phone = b;
-    rectOn(b, 'y', 5, 8, 54, 114, 'det', 6);
+    rectOn(b, 'y', 5, 8, 54, 114, 'det', 3);
     // a message bubble
-    rectOn(b, 'y', 10, 80, 40, 22, 'scr', 6);
-    lineOn(b, 'y', 14, 94, 44, 94, 'scr', 6); lineOn(b, 'y', 14, 88, 36, 88, 'scr', 6);
+    rectOn(b, 'y', 10, 80, 40, 22, 'scr', 3);
+    lineOn(b, 'y', 14, 94, 44, 94, 'scr', 3); lineOn(b, 'y', 14, 88, 36, 88, 'scr', 3);
     items.phoneTop = pointOn(b, 'y', 32, 128);
   }
 
   // ---------------- cables (signal directions) ----------------
   const v = items;
-  // control video out -> splitter in
-  const vidPts = cable(v.videoOut, [v.videoOut[0] + 10, v.videoOut[1] + 70, v.videoOut[2] - 60], [v.splIn[0] - 60, v.splIn[1] + 40, v.splIn[2] - 10], v.splIn, 'cab', 2);
-  const vidMid = vidPts[Math.floor(vidPts.length * 0.62)];
-  // splitter out 1 -> screen in (back toward the screen)
-  cable(v.splOut1, [v.splOut1[0] + 40, v.splOut1[1] - 10, v.splOut1[2] + 30], [v.screenIn[0] + 60, v.screenIn[1] + 10, v.screenIn[2] - 40], v.screenIn, 'cab', 3);
-  // splitter out 2 -> capture in
-  cable(v.splOut2, [v.splOut2[0] + 40, v.splOut2[1] + 20, v.splOut2[2] - 20], [v.capIn[0] - 20, v.capIn[1] + 50, v.capIn[2] + 10], v.capIn, 'cab', 4);
-  // capture USB -> box
-  cable(v.capUsb, [v.capUsb[0] + 40, v.capUsb[1], v.capUsb[2] - 10], [v.boxIn[0] - 20, v.boxIn[1] + 40, v.boxIn[2]], v.boxIn, 'cab', 5);
-  // keys: capture -> control USB (dashed: only after sign-off)
+  // a copy of the screen into Marcel
+  const vidPts = cable(v.videoOut, [v.videoOut[0] + 10, v.videoOut[1] + 80, v.videoOut[2] - 60], [v.boxIn[0] - 70, v.boxIn[1] + 50, v.boxIn[2] + 10], v.boxIn, 'cab', 2);
+  const vidMid = vidPts[Math.floor(vidPts.length * 0.55)];
+  // keys back to the control (dashed: only after sign-off)
   const usbC = [v.control.x1, v.control.y0 + 54, v.control.z0 + 157];
-  const keyPts = cable(v.capKeys, [v.capKeys[0] + 30, v.capKeys[1] - 160, v.capKeys[2] + 120], [usbC[0] + 160, usbC[1] - 20, usbC[2] + 80], usbC, 'key', 4);
-  let keyMid = keyPts[0]; for (const q of keyPts) if (q[1] < keyMid[1]) keyMid = q;
+  // out of the box's face, up and across to the control's keyboard port, clear of both bodies
+  const keyPts = cable(v.boxKeys, [v.boxKeys[0] - 20, v.boxKeys[1] + 110, v.boxKeys[2] + 90], [usbC[0] + 130, usbC[1] + 70, usbC[2] + 60], usbC, 'key', 2);
+  const keyMid = keyPts[Math.floor(keyPts.length * 0.5)];
   // wireless: box -> phone (dashed arcs)
   {
-    const a = iso(...v.boxAnt.map((c, i) => (i === 2 ? c + 46 : c)));
+    const a = iso(...v.boxAnt);
     const b = iso(v.phone.x0 + 10, v.phone.y1, v.phone.z0 + 120);
     const pts = [];
     for (let i = 0; i <= 30; i++) { const t = i / 30; pts.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t - Math.sin(t * Math.PI) * 50]); }
-    poly2d(pts, 'air', 6);
+    poly2d(pts, 'air', 3);
     for (const k of [1, 2, 3]) {
       const arc = []; for (let i = 0; i <= 12; i++) { const ang = -Math.PI / 2 - 0.7 + (1.4 * i) / 12; arc.push([a[0] + Math.cos(ang) * 8 * k, a[1] + Math.sin(ang) * 8 * k]); }
-      poly2d(arc, 'air', 6);
+      poly2d(arc, 'air', 3);
     }
   }
 
   // ---------------- balloons and notes ----------------
   const pt = (p) => iso(...p);
+  const c = pt([v.control.x0 + 20, v.control.y0, v.control.z1]);
+  const bx = pt([v.box.x1, v.box.y0 + 30, v.box.z0 + 26]);
+  const ph = pt([v.phone.x1, v.phone.y0, v.phone.z1 - 20]);
+  const e = pt(v.ethX);
   if (W) {
-    const c = pt([v.control.x0 + 20, v.control.y0, v.control.z1]);
     balloon(1, c[0] - 40, c[1] - 44, c[0] + 18, c[1] + 6, 1);
-    const s = pt([v.screen.x0 + 10, v.screen.y1, v.screen.z1 - 6]);
-    balloon(3, s[0] - 70, s[1] - 10, s[0], s[1], 3);
-    const sp = pt([v.splitter.x0 + 30, v.splitter.y0 + 20, v.splitter.z1]);
-    balloon(2, sp[0] + 40, sp[1] - 74, sp[0], sp[1], 2);
-    const cp = pt([v.capture.x0 + 23, v.capture.y0 + 23, v.capture.z1]);
-    balloon(4, cp[0] - 20, cp[1] + 96, cp[0] - 4, cp[1] + 30, 4);
-    const bx = pt([v.box.x1, v.box.y0 + 30, v.box.z0 + 18]);
-    balloon(5, bx[0] + 70, bx[1] + 40, bx[0], bx[1], 5);
-    const ph = pt([v.phone.x1, v.phone.y0, v.phone.z1 - 20]);
-    balloon(6, ph[0] + 46, ph[1] - 30, ph[0], ph[1], 6);
-    // notes
-    const e = pt(v.ethX);
+    balloon(2, bx[0] + 64, bx[1] + 52, bx[0], bx[1], 2);
+    balloon(3, ph[0] + 46, ph[1] - 30, ph[0], ph[1], 3);
     poly2d([[e[0] + 14, e[1] - 14], [e[0] + 44, e[1] - 64], [e[0] + 60, e[1] - 64]], 'lead', 1);
     letter('NO NETWORK CABLE', 10, e[0] + 66, e[1] - 59, 1, 'start', 'note');
-    const k = keyMid;
-    letter('KEYS, ONLY AFTER SIGN-OFF', 10, k[0] + 14, k[1] - 6, 4, 'start', 'note');
-    const vi = vidMid;
-    letter('VIDEO', 9, vi[0] - 54, vi[1] + 26, 2, 'start', 'note');
-    // what actually crosses the building line, so the picture says what the text says
-    letter('OVER THE INTERNET: TELEGRAM, AND TODAY A CLOUD AI MODEL', 9, ph[0] - 420, ph[1] - 64, 6, 'start', 'note');
-    letter('THE CONTROL: NO NETWORK, EVER', 9, ph[0] - 420, ph[1] - 44, 6, 'start', 'note');
+    letter('KEYS, ONLY AFTER SIGN-OFF', 10, keyMid[0] + 16, keyMid[1] + 4, 2, 'start', 'note');
+    letter('A COPY OF THE SCREEN', 9, vidMid[0] - 150, vidMid[1] + 30, 2, 'start', 'note');
+    letter('A MESSAGE WHEN IT MATTERS', 9, ph[0] - 300, ph[1] - 64, 3, 'start', 'note');
   } else {
-    const c = pt([v.control.x0 + 20, v.control.y0, v.control.z1]);
     balloon(1, c[0] - 30, c[1] - 30, c[0] + 18, c[1] + 6, 1);
-    const s = pt([v.screen.x0 + 10, v.screen.y1, v.screen.z1 - 6]);
-    balloon(3, s[0] - 34, s[1] + 40, s[0], s[1], 3);
-    const sp = pt([v.splitter.x0 + 30, v.splitter.y0 + 20, v.splitter.z1]);
-    balloon(2, sp[0] - 40, sp[1] - 54, sp[0], sp[1], 2);
-    const cp = pt([v.capture.x0 + 23, v.capture.y0 + 23, v.capture.z1]);
-    balloon(4, cp[0] + 60, cp[1] - 40, cp[0], cp[1], 4);
-    const bx = pt([v.box.x1, v.box.y0 + 40, v.box.z0 + 16]);
-    balloon(5, bx[0] + 20, bx[1] + 60, bx[0], bx[1], 5);
-    const ph = pt([v.phone.x0 + 4, v.phone.y1, v.phone.z0 + 20]);
-    balloon(6, ph[0] - 10, ph[1] + 60, ph[0], ph[1], 6);
-    const e = pt(v.ethX);
+    balloon(2, bx[0] + 30, bx[1] + 60, bx[0], bx[1], 2);
+    const p2 = pt([v.phone.x0 + 4, v.phone.y1, v.phone.z0 + 20]);
+    balloon(3, p2[0] - 10, p2[1] + 60, p2[0], p2[1], 3);
     letter('NO NETWORK', 9, e[0] + 30, e[1] - 34, 1, 'start', 'note');
     letter('CABLE', 9, e[0] + 30, e[1] - 18, 1, 'start', 'note');
     poly2d([[e[0] + 12, e[1] - 12], [e[0] + 26, e[1] - 30]], 'lead', 1);

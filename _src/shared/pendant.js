@@ -445,10 +445,13 @@ export function buildPendant(THREE, { RoundedBoxGeometry, quality = 'high' } = {
     box(tx(0), gy, tx(9) - tx(0), 3, C.text); box(tx(0), gy - 14, 3, 30, C.text); box(tx(9) - 3, gy - 14, 3, 30, C.text);
     text('9 S EARLY', (tx(0) + tx(9)) / 2, gy - 22, `600 32px ${WIDE}`, C.text, 'center');
   }
-  let lastKey = '';
+  let lastKey = '', lastDraw = 0, lastPage = '';
   function drawScreen(s) {
     const key = [s.page, s.block, Math.round(s.load), s.held, s.resumed, s.cursor, Math.floor(s.clock * 2), s.x.toFixed(3), s.y.toFixed(3), s.peak].join('|');
-    if (key === lastKey) return; lastKey = key;
+    if (key === lastKey) return;
+    const now = performance.now(), pageKey = s.page + s.held + s.resumed;
+    if (pageKey === lastPage && now - lastDraw < 110) return;
+    lastKey = key; lastDraw = now; lastPage = pageKey;
     const g = screenCtx;
     g.fillStyle = C.bg; g.fillRect(0, 0, SCREEN.px, SCREEN.py);
     drawTop(s);

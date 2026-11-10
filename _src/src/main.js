@@ -253,7 +253,7 @@ function buildOverlays(st) {
   const PADX = 9, PADY = 7, LINE_GAP = 1.0;   // space between a tag's lines, as a fraction of the line's size
   // a tag is a dark plate with plotted lettering; some items carry a shorter version for phones
   function makeText(lines) {
-    const g = mk('g'); let y = PADY, maxW = 0; const paths = [];
+    const g = mk('g'); let y = PADY + 5, maxW = 0; const paths = [];   // plotted capitals rise above their size, so more room on top
     for (const [str, size, tone] of lines) {
       y += size;
       const { d, width } = hersheyPath(str, size, PADX, y, 'start');

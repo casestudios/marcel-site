@@ -435,6 +435,9 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--s
   .tb-title, .tb-notes { grid-column: 1 / -1; }
   .tb-cell:nth-child(2n) { border-right: 1px solid var(--sheet-ink) !important; }
 }
+@media (max-width: 600px) {
+  .film-media { aspect-ratio: 4 / 5; }
+}
 @media (max-width: 760px) {
   .dw-wide { display: none; }
   .dw-tall { display: block; max-width: 460px; margin: 0 auto; }

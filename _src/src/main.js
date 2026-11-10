@@ -453,6 +453,7 @@ function buildCallouts() {
 {
   const video = $('.film-video');
   const beats = $$('.beats button');
+  if (matchMedia('(max-width: 600px)').matches) video.poster = 'media/film-poster-phone.jpg';
   beats.forEach((b) => b.addEventListener('click', () => {
     video.currentTime = Number(b.dataset.t) + 0.05;
     video.play().catch(() => {});

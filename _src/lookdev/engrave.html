@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#060607;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style>
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import { HERSHEY } from '../src/hershey-data.js';
+import { createEngrave } from '../shared/engrave3d.js';
+const q = new URLSearchParams(location.search);
+const fonts = [['Hubot Sans', 'hubot-sans'], ['Martian Mono', 'martian-mono'], ['Mona Sans', 'mona-sans']];
+for (const [fam, f] of fonts) { const ff = new FontFace(fam, `url(../site/assets/fonts/${f}.woff2)`, { weight: '100 900', stretch: '75% 125%' }); await ff.load(); document.fonts.add(ff); }
+const E = createEngrave(THREE, { EffectComposer, RenderPass, UnrealBloomPass, BokehPass, ShaderPass, OutputPass, RectAreaLightUniformsLib }, { canvas: document.getElementById('c'), quality: q.get('q') || 'high', HERSHEY });
+E.resize(innerWidth, innerHeight, 1);
+const arr = (k, d) => (q.has(k) ? q.get(k).split(',').map(Number) : d);
+const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d);
+const T = num('t', E.prog.duration * 0.6);
+// run up to T in small steps so chips fly and land like they would live
+const dt = 1 / 30; let t = 0;
+while (t < T) { t = Math.min(T, t + dt); E.update(t, dt); }
+for (let i = 0; i < num('settle', 0); i++) E.update(T, dt);
+E.setCamera({ pos: arr('pos', [-60, 135, 300]), look: arr('look', [8, 18, -4]), fov: num('fov', 24), viewX: num('vx', 0), viewY: num('vy', 0), focus: q.has('focus') ? num('focus') : null });
+await E.compile();
+for (let i = 0; i < 2; i++) E.render();
+window.__info = { duration: E.prog.duration, speedup: E.prog.speedup, feedLen: E.prog.feedLen, blocks: E.prog.blocks.length };
+window.__ready = true;
+</script></body></html>

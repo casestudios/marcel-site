@@ -238,6 +238,9 @@ export function buildDrawing(variant = 'wide') {
     letter('KEYS, ONLY AFTER SIGN-OFF', 10, k[0] + 14, k[1] - 6, 4, 'start', 'note');
     const vi = vidMid;
     letter('VIDEO', 9, vi[0] - 54, vi[1] + 26, 2, 'start', 'note');
+    // what actually crosses the building line, so the picture says what the text says
+    letter('OVER THE INTERNET: TELEGRAM, AND TODAY A CLOUD AI MODEL', 9, ph[0] - 420, ph[1] - 64, 6, 'start', 'note');
+    letter('THE CONTROL: NO NETWORK, EVER', 9, ph[0] - 420, ph[1] - 44, 6, 'start', 'note');
   } else {
     const c = pt([v.control.x0 + 20, v.control.y0, v.control.z1]);
     balloon(1, c[0] - 30, c[1] - 30, c[0] + 18, c[1] + 6, 1);

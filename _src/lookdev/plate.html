@@ -1,0 +1,112 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#0a0a0b;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style>
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js"}}</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { createTool3D } from '../shared/tool3d.js';
+const q = new URLSearchParams(location.search);
+const f1 = new FontFace('Hubot Sans', 'url(../node_modules/@fontsource-variable/hubot-sans/files/hubot-sans-latin-standard-normal.woff2)', { weight: '200 900', stretch: '75% 125%' });
+await f1.load(); document.fonts.add(f1);
+const tool = createTool3D(THREE, { canvas: document.getElementById('c'), quality: 'high', preserveDrawingBuffer: true });
+const w = innerWidth, h = innerHeight;
+tool.resize(w, h, 1);
+const mode = q.get('mode');
+const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d);
+const arr = (k, d) => (q.has(k) ? q.get(k).split(',').map(Number) : d);
+const { scene, camera, parts, root, work, chipRoot, backdrop } = tool;
+
+function blanchard(size = 2048) {
+  const c = document.createElement('canvas'); c.width = size; c.height = size;
+  const g = c.getContext('2d');
+  g.fillStyle = '#38393c'; g.fillRect(0, 0, size, size);
+  const r = tool.rng(91);
+  // overlapping arcs from a rotary surface grinder
+  // one grinding wheel path: concentric arcs from centres marching across the plate
+  for (let pass = 0; pass < 4; pass++) {
+    const cy0 = (pass + 0.5) * size / 4;
+    for (let x = -size * 0.4; x < size * 1.4; x += 3) {
+      g.strokeStyle = `rgba(${170 + r() * 60},${172 + r() * 60},${178 + r() * 60},${0.012 + r() * 0.03})`;
+      g.lineWidth = 0.8 + r() * 1.2;
+      g.beginPath(); g.arc(x, cy0 + (r() - 0.5) * 8, size * 0.42, -0.6, 0.6); g.stroke();
+    }
+  }
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+if (mode === 'knoll') {
+  tool.update({ t: 0, spin: 0, explode: 0, lift: 0, turn: 0, cam: 0 });
+  work.visible = false; chipRoot.visible = false; backdrop.visible = false;
+  const plateTex = blanchard();
+  plateTex.repeat.set(1.6, 1.6);
+  const plate = new THREE.Mesh(new THREE.PlaneGeometry(1400, 900), new THREE.MeshPhysicalMaterial({ color: 0x6a6c70, map: plateTex, metalness: 0.75, roughness: 0.5 }));
+  plate.rotation.x = -Math.PI / 2; plate.receiveShadow = true;
+  scene.add(plate);
+  // lay each part flat, axes parallel and pointing up the frame, evenly spaced (knolling)
+  const lay = [
+    ['stud', 11.25, 0, 20.1, -205, 0],
+    ['holder', 31.75, 21, 176.25, -115, 0],
+    ['collet', 16.5, 0, 40, -10, 0],
+    ['nut', 25.0, 0, 22.5, 70, 0],
+    ['endmill', 6.35, 0, 76.2, 150, 0],
+  ];
+  const parentOf = {};
+  for (const [k, rmax, y0, y1, x] of lay) {
+    const p = parts[k];
+    scene.attach(p);
+    // local +y becomes -z: the tool axis points up the frame; the part rests on its largest diameter
+    p.rotation.set(-Math.PI / 2, 0, 0);
+    p.position.set(x, rmax, (y0 + y1) / 2);
+  }
+  scene.environmentRotation.y = num('envYaw', 0.6);
+  tool.key.position.set(-160, 420, 120);
+  tool.key.shadow.camera.left = -400; tool.key.shadow.camera.right = 400; tool.key.shadow.camera.top = 400; tool.key.shadow.camera.bottom = -400;
+  tool.key.shadow.camera.updateProjectionMatrix();
+  camera.fov = num('fov', 20);
+  camera.up.set(0, 0, -1);
+  scene.environmentIntensity = num('envI', 1.7);
+  tool.key.intensity = 2.2;
+  camera.position.set(...arr('pos', [-25, 720, 70]));
+  camera.lookAt(...arr('look', [-25, 0, -10]));
+  camera.updateProjectionMatrix();
+} else if (mode === 'stand') {
+  tool.update({ t: num('t', 0.3), spin: 0.0, explode: num('explode', 0), lift: 0, turn: 0, cam: 0 });
+  work.visible = false; chipRoot.visible = false;
+  root.position.set(0, 34, 0);
+  root.rotation.y = num('rot', 0.5);
+  const useFloor = q.get('floor') === '1';
+  // reflection: a mirrored copy under a dark glass floor
+  const mirror = root.clone(true);
+  mirror.scale.y = -1; mirror.position.y = -34 - 2;
+  mirror.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.side = THREE.BackSide; } });
+  if (useFloor) scene.add(mirror);
+  const c = document.createElement('canvas'); c.width = 512; c.height = 512;
+  const g = c.getContext('2d');
+  const grd = g.createRadialGradient(256, 256, 20, 256, 256, 256);
+  grd.addColorStop(0, 'rgba(10,10,11,0.62)'); grd.addColorStop(0.5, 'rgba(10,10,11,0.86)'); grd.addColorStop(1, 'rgba(10,10,11,1)');
+  g.fillStyle = grd; g.fillRect(0, 0, 512, 512);
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, toneMapped: false, depthWrite: false }));
+  glass.rotation.x = -Math.PI / 2; glass.position.y = -1; glass.renderOrder = 2;
+  if (useFloor) scene.add(glass);
+  scene.environmentIntensity = num('envI', 1.35);
+  backdrop.position.set(0, 120, -700);
+  scene.environmentRotation.y = num('envYaw', -0.35);
+  camera.fov = num('fov', 24);
+  camera.position.set(...arr('pos', [-60, 96, 560]));
+  camera.lookAt(...arr('look', [0, 96, 0]));
+  camera.filmOffset = num('shiftX', 0) * camera.getFilmWidth() * 0.5;
+  camera.updateProjectionMatrix();
+} else {
+  const st = {};
+  for (const k of ['t','spin','emit','lift','explode','turn','cam','envYaw','shiftX','shiftY','fov','fitAspect','fitHeight','fitMargin']) if (q.has(k)) st[k] = Number(q.get(k));
+  if (q.has('framing')) st.framing = q.get('framing');
+  for (const k of ['camAPos','camALook']) if (q.has(k)) st[k] = q.get(k).split(',').map(Number);
+  tool.update(st);
+}
+await tool.compile();
+tool.render();
+window.__ready = true;
+</script></body></html>

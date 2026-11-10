@@ -43,64 +43,68 @@
 
 <main id="main">
 
-<!-- ======================= THE STAGE: one tool, scrolled from cut to inspection ======================= -->
-<section class="stage" id="top" aria-label="The November 2 run, told on one tool">
+<!-- ======================= THE STAGE: the control, scrolled from a normal cut to a stop ======================= -->
+<section class="stage" id="top" aria-label="The November 2 run, told on the control">
   <div class="stage-pin">
-    <picture class="stage-poster">
-      <source media="(max-aspect-ratio: 4/5)" srcset="media/t02-cut-tall.webp">
-      <img src="media/t02-cut.webp" alt="" width="1920" height="1080" fetchpriority="high">
+    <picture class="stage-poster" data-step="0">
+      <source media="(max-aspect-ratio: 4/5)" srcset="media/stage-0-tall.webp">
+      <img src="media/stage-0.webp" alt="" width="1920" height="1080" fetchpriority="high">
     </picture>
-    <picture class="stage-poster stage-poster-b" aria-hidden="true">
-      <source media="(max-aspect-ratio: 4/5)" srcset="media/t02-open-tall.webp">
-      <img src="media/t02-open.webp" alt="" width="1920" height="1080" loading="lazy">
-    </picture>
+    <picture class="stage-poster" data-step="1" aria-hidden="true"><source media="(max-aspect-ratio: 4/5)" srcset="media/stage-1-tall.webp"><img src="media/stage-1.webp" alt="" width="1920" height="1080" loading="lazy"></picture>
+    <picture class="stage-poster" data-step="2" aria-hidden="true"><source media="(max-aspect-ratio: 4/5)" srcset="media/stage-2-tall.webp"><img src="media/stage-2.webp" alt="" width="1920" height="1080" loading="lazy"></picture>
+    <picture class="stage-poster" data-step="3" aria-hidden="true"><source media="(max-aspect-ratio: 4/5)" srcset="media/stage-3-tall.webp"><img src="media/stage-3.webp" alt="" width="1920" height="1080" loading="lazy"></picture>
+    <picture class="stage-poster" data-step="4" aria-hidden="true"><source media="(max-aspect-ratio: 4/5)" srcset="media/stage-4-tall.webp"><img src="media/stage-4.webp" alt="" width="1920" height="1080" loading="lazy"></picture>
     <canvas class="stage-canvas" aria-hidden="true"></canvas>
     <svg class="callouts" aria-hidden="true"></svg>
     <div class="shade" aria-hidden="true"></div>
-    <div class="hud" aria-hidden="true">
-      <div class="hud-row"><span class="hud-k">TOOL</span><span class="hud-v">T02 · 1/2 3FL ROUGH</span></div>
-      <div class="hud-row"><span class="hud-k">BLOCK</span><span class="hud-v" data-hud="block">N250</span></div>
-      <div class="hud-row"><span class="hud-k">SPINDLE LOAD</span><span class="hud-v"><span data-hud="load">72</span>%</span><span class="hud-bar"><i data-hud="bar"></i></span></div>
-      <div class="hud-row"><span class="hud-k">FEED</span><span class="hud-v" data-hud="feed">80.0 IN/MIN</span></div>
-      <div class="hud-lamps"><span class="lamp" data-lamp="run">RUN</span><span class="lamp" data-lamp="hold">HOLD</span><span class="lamp" data-lamp="alm">ALM</span></div>
-    </div>
+    <div class="fade" aria-hidden="true"></div>
   </div>
 
   <div class="stage-steps">
     <div class="step step-hero">
       <div class="hero-copy">
         <h1 class="h-display">A stopped machine shouldn’t wait for&nbsp;morning.</h1>
-        <p class="lede">Marcel is an air-gapped AI operator for American CNC shops. It reads the control’s own screen, holds the feed before a tool breaks, works from that machine’s manuals, and texts whoever is on call. The control never goes on a network.</p>
+        <p class="lede">Marcel is an air-gapped AI operator for American CNC shops. It reads the control’s own screen, holds the feed before a tool breaks, works from that machine’s manuals, and texts whoever is on call. The control never goes on a network; in simulation today, with a first real machine next.</p>
         <div class="actions">
           <a class="btn btn-solid" href="#pilot">Pilot Marcel on one machine</a>
           <a class="btn btn-line" href="#film">Watch the 2:14&nbsp;AM film</a>
         </div>
       </div>
-      <p class="scroll-cue" aria-hidden="true"><span>Scroll to run it</span></p>
+      <p class="scroll-cue" aria-hidden="true"><span>Scroll through the November 2 simulated run</span></p>
     </div>
 
-    <div class="step step-panel step-climb">
+    <div class="step step-panel" data-step="1">
       <div class="panel">
-        <h2 class="h-step">The load starts climbing.</h2>
-        <p>Spindle load on T02 rises from 72%, about 3.5% a second. At that rate the spindle overloads in about 13 seconds. Marcel is reading it off the same screen the operator reads.</p>
+        <h2 class="h-step">It reads the screen your operator reads.</h2>
+        <p>Marcel watches the control’s own display through a copy of its video signal. Nothing is installed on the control, and nothing is bolted to the spindle. Here, spindle load on T02 starts climbing, about 3% a second.</p>
+        <p class="spec">N270 · T02 1/2" 3-flute rougher · S9000 · F40.0 IPM · load <span data-live="load">72</span>% and rising</p>
       </div>
     </div>
 
-    <div class="step step-panel step-hold">
+    <div class="step step-panel" data-step="2">
       <div class="panel">
-        <h2 class="h-step">At 93%, Marcel holds the feed.</h2>
-        <p>About 8 seconds before overload. The spindle keeps turning, there’s no alarm, and the part is safe. Stopping is the safe direction, so Marcel doesn’t wait for anyone to do it.</p>
+        <h2 class="h-step">At 90%, it holds the feed.</h2>
+        <p>About 9 seconds before the spindle would have overloaded. The spindle keeps turning and nothing alarms; at worst the part carries a small mark where the tool paused. Stopping is the safe direction, so Marcel doesn’t wait for anyone.</p>
+        <p class="spec">Feed hold key sent · F0.0 · S9000 · load falls to 6% · no alarm</p>
       </div>
     </div>
 
-    <div class="step step-panel step-why">
+    <div class="step step-panel" data-step="3">
       <div class="panel">
-        <h2 class="h-step">Then it works out why.</h2>
-        <p>It pages through tool life and alarm history on the control. T02 was replaced, but its counter shows 37 left, not 300. The last spindle overload was on October 29.</p>
+        <h2 class="h-step">Then it pages through the control, the way a technician would.</h2>
+        <p>Alarm history: the last spindle overload was on October 29. Tool life: T02’s counter still says 37 parts left. It’s the third stop at N270 today.</p>
+        <p class="spec">SP9029 SSPA:29 OVERLOAD 2026/10/29 · T02 263/300 used</p>
+      </div>
+    </div>
+
+    <div class="step step-panel step-causes" data-step="4">
+      <div class="panel">
+        <h2 class="h-step">Then it narrows down why.</h2>
+        <p>Three likely causes. Each one is something a person can check at the machine in under a minute.</p>
         <ol class="causes" aria-label="Marcel’s likely causes">
-          <li><span class="n">1</span>Chips packed or low coolant</li>
-          <li><span class="n">2</span>New T02 the wrong type, or not seated</li>
-          <li><span class="n">3</span>A counter or program issue</li>
+          <li data-cause="1"><span class="n">1</span><span><strong>T02 worn, wrong, or not seated after the swap.</strong> <span class="more">A worn corner rubs instead of cutting, and a tool that slips in the collet cuts deeper than the program expects. Check the corners, the marking on the shank, and how far it sticks out. In the demo history, a worn T02 was the cause both past times.</span></span></li>
+          <li data-cause="2"><span class="n">2</span><span><strong>Chips or low coolant.</strong> <span class="more">Chips left in the flutes get cut a second time, so the load climbs. Clear the chips and check the nozzle is on the cut.</span></span></li>
+          <li data-cause="3"><span class="n">3</span><span><strong>An offset or program problem at N270.</strong> <span class="more">If T02’s length offset, H02, wasn’t re-measured after the swap, the tool cuts at the wrong depth. Check H02 against the tool, then block N270.</span></span></li>
         </ol>
       </div>
     </div>
@@ -110,21 +114,20 @@
         <div class="phone-copy">
           <h2 class="h-step">Then it texts whoever is on call, and&nbsp;waits.</h2>
           <p>Nothing restarts until a person says so. Here, you’re the technician.</p>
-          <p class="fine">Marcel’s messages are copied word for word from its simulated run on November 2, 2026. The control was a simulator on an offline industrial PC. The tool is a 3D drawing.</p>
+          <p class="fine">Marcel’s messages are copied word for word from its simulated run on November 2, 2026, the run filmed under “The recordings” below. The control was a simulator on an offline industrial PC. The control and tool on this page are 3D drawings.</p>
         </div>
         <div class="phone" role="group" aria-label="The on-call phone">
           <div class="phone-bar"><span>Marcel</span><span class="phone-sub">Machine 3</span></div>
           <ol class="thread" aria-live="polite" tabindex="0" aria-label="Messages from Marcel">
-            <li class="msg m">Marcel stopped the cut at 93% spindle load, about 8 s before overload. Feed held, spindle turning, no alarm, part safe.</li>
-            <li class="msg m">What happened: load rose from 72% at 3.5 %/s on T02, block N270, right after T02 was replaced. Counter shows 37 left, not 300.</li>
-            <li class="msg m">Likely causes: 1. Chips packed or low coolant (demo history, 1 of 2 past cases). 2. New T02 wrong type or not seated. 3. Counter or program issue.</li>
-            <li class="msg m">Do this:<br>1. Stay clear of the spindle, behind the guard.<br>2. Check T02 type and seating, clear chips.<br>3. Check the coolant nozzle.<br>Reply “fixed” or tell me what you found.</li>
-            <li class="msg m">Sources: none (no alarm). History is demo data.</li>
-            <li class="msg you" hidden>Replaced T02</li>
+            <li class="msg m">Marcel stopped the cut at 90% spindle load, about 9 s before overload. Feed held, spindle turning, no alarm, part safe.</li>
+            <li class="msg m">What happened: load rose from 72% at 3 %/s on T02, block N270. Third stop at N270 today. T02 counter still shows 37 left.</li>
+            <li class="msg m">Likely causes: 1. T02 worn, wrong or unseated after the swap (demo history: worn T02 both past times). 2. Chips or low coolant. 3. Offset or program problem at N270.</li>
+            <li class="msg m msg-do">To do:<br>1. Stop the spindle before touching the tool.<br>2. Check T02 is correct, seated, with no corner wear.<br>3. Check T02 length offset and coolant nozzle.<br>4. Reply what you found, e.g. “replaced T02”.<br>Sources: none.<span class="msg-t">5:09 PM</span></li>
+            <li class="msg you" hidden>Replaced t02</li>
             <li class="msg m" hidden data-late>Back to normal: T02 counter reset to 300. Cycle running, past N270 now at N330, spindle load 39%, feed 100%, no alarm. Note: T05 has only 6 pieces left.</li>
           </ol>
           <div class="phone-reply">
-            <button class="btn btn-solid btn-reply" type="button">Reply “Replaced T02”</button>
+            <button class="btn btn-solid btn-reply" type="button">Reply “Replaced t02”</button>
             <p class="phone-wait">Marcel won’t restart until you reply.</p>
           </div>
         </div>
@@ -147,21 +150,22 @@
     <div class="bom-wrap">
       <table class="bom">
         <caption class="sr-only">Parts list for the drawing</caption>
-        <thead><tr><th scope="col">Item</th><th scope="col">Part</th><th scope="col">What it does</th><th scope="col">On the control, it touches</th></tr></thead>
+        <thead><tr><th scope="col">Item</th><th scope="col">Part</th><th scope="col">What it does</th><th scope="col">Touches on the control</th></tr></thead>
         <tbody>
           <tr data-item="1"><td>1</td><th scope="row">Your control</th><td>Runs your program, as it does today. No new software, no network cable.</td><td>—</td></tr>
           <tr data-item="2"><td>2</td><th scope="row">Splitter</th><td>Sends one copy of the picture to the screen and one to Marcel.</td><td>The screen’s video cable</td></tr>
           <tr data-item="3"><td>3</td><th scope="row">Operator’s screen</th><td>Keeps its picture the whole time.</td><td>—</td></tr>
           <tr data-item="4"><td>4</td><th scope="row">Capture-and-keyboard device</th><td>Video comes in. Keys go out like a plain USB keyboard.</td><td>The keyboard port, only after sign-off</td></tr>
-          <tr data-item="5"><td>5</td><th scope="row">Marcel’s box</th><td>A small computer next to the machine, where Marcel runs.</td><td>Nothing</td></tr>
-          <tr data-item="6"><td>6</td><th scope="row">Your phone</th><td>Gets Marcel’s texts, and your replies go back the same way.</td><td>Nothing</td></tr>
+          <tr data-item="5"><td>5</td><th scope="row">Marcel’s box</th><td>A small computer next to the machine, where Marcel runs. On the test bench today, it’s a laptop.</td><td>Nothing</td></tr>
+          <tr data-item="6"><td>6</td><th scope="row">Your phone</th><td>Gets Marcel’s messages (through Telegram today), and your replies come back the same way.</td><td>Nothing</td></tr>
         </tbody>
       </table>
       <div class="leaves">
         <h3 class="h-small">What leaves the building</h3>
-        <p><strong>Today, two things:</strong> the texts to your phone, and what Marcel sends to a cloud AI model while it works out what happened. Diagnosis already runs on a local model.</p>
-        <p><strong>Next,</strong> the whole agent moves onto the box in your shop. Then only the texts leave.</p>
-        <p>Nothing reaches the control except keystrokes, the same keys an operator would press, from a short reviewed list.</p>
+        <p><strong>The control: nothing.</strong> It never gets a network connection. “Air-gapped” means the control.</p>
+        <p><strong>Marcel’s box, today:</strong> the messages to your phone, and what Marcel sends to a cloud AI model while it works out what happened. Diagnosis already runs on a local model.</p>
+        <p><strong>Next,</strong> the whole agent moves onto the box in your shop. Then only the messages leave.</p>
+        <p>Nothing reaches the control except keystrokes, the same keys an operator would press, from a short reviewed list, and only after the shop signs off on that machine.</p>
       </div>
     </div>
   </div>
@@ -169,12 +173,13 @@
 
 <!-- ======================= WHAT'S REAL: inspection report ======================= -->
 <section class="report" id="proof" aria-labelledby="proof-h">
-  <div class="plate plate-knoll" aria-hidden="true">
+  <figure class="plate plate-measured">
     <picture>
-      <source media="(max-width: 700px)" srcset="media/knoll-tall.webp">
-      <img src="media/knoll.webp" alt="" width="2400" height="1100" loading="lazy" decoding="async">
+      <source media="(max-width: 700px)" srcset="media/measured-tall.webp">
+      <img src="media/measured.webp" alt="The control’s graph page: spindle load on T02 climbing from 72% toward overload, with the feed hold at 93% about 8 seconds before the projected overload." width="2400" height="1100" loading="lazy" decoding="async">
     </picture>
-  </div>
+    <figcaption>The November 2 run on the control’s graph page. A 3D drawing; the trace follows the simulated run.</figcaption>
+  </figure>
   <div class="wrap">
     <div class="report-head">
       <h2 class="h-section" id="proof-h">Measured so far.</h2>
@@ -185,22 +190,21 @@
       <tbody>
         <tr>
           <th scope="row">Feed held before the spindle would have overloaded</th>
-          <td class="res"><span class="num" data-count="8">8</span><span class="unit">s early</span>
-            <svg class="viz viz-early" viewBox="0 0 240 24" aria-hidden="true"><line x1="0" y1="12" x2="240" y2="12" class="vz-base"/><line x1="0" y1="12" x2="150" y2="12" class="vz-run"/><line x1="150" y1="3" x2="150" y2="21" class="vz-hold"/><line x1="150" y1="12" x2="240" y2="12" class="vz-gap"/><line x1="240" y1="3" x2="240" y2="21" class="vz-over"/></svg>
+          <td class="res"><span class="num" data-count="9">9</span><span class="unit">s early</span>
+            <svg class="viz viz-early viz-lab" viewBox="0 0 240 40" aria-hidden="true"><line x1="0" y1="12" x2="240" y2="12" class="vz-base"/><line x1="0" y1="12" x2="96" y2="12" class="vz-run"/><line x1="96" y1="3" x2="96" y2="21" class="vz-hold"/><line x1="96" y1="12" x2="239" y2="12" class="vz-gap"/><line x1="239" y1="3" x2="239" y2="21" class="vz-over"/><text x="96" y="36" class="vz-t" text-anchor="middle">hold at 90%</text><text x="240" y="36" class="vz-t" text-anchor="end">overload</text></svg>
           </td>
-          <td>In the simulated run on November 2, 2026.</td>
+          <td>In the simulated run on November 2, 2026, filmed below.</td>
         </tr>
         <tr>
           <th scope="row">From an alarm to a cited fix on the technician’s phone</th>
           <td class="res"><span class="num">6–11</span><span class="unit">s</span>
-            <svg class="viz viz-range" viewBox="0 0 240 24" aria-hidden="true"><line x1="0" y1="12" x2="240" y2="12" class="vz-base"/><line x1="96" y1="12" x2="176" y2="12" class="vz-band"/><line x1="0" y1="5" x2="0" y2="19" class="vz-tick"/><line x1="240" y1="5" x2="240" y2="19" class="vz-tick"/></svg>
+            <svg class="viz viz-range viz-lab" viewBox="0 0 240 40" aria-hidden="true"><line x1="0" y1="12" x2="240" y2="12" class="vz-base"/><line x1="96" y1="12" x2="176" y2="12" class="vz-band"/><line x1="1" y1="5" x2="1" y2="19" class="vz-tick"/><line x1="239" y1="5" x2="239" y2="19" class="vz-tick"/><text x="0" y="36" class="vz-t">0 s</text><text x="240" y="36" class="vz-t" text-anchor="end">15 s</text></svg>
           </td>
           <td>End to end, in simulation.</td>
         </tr>
         <tr>
           <th scope="row">Manual pages indexed, so an answer can point to a page</th>
           <td class="res"><span class="num" data-count="2100" data-plus>2,100+</span>
-            <canvas class="viz viz-pages" width="240" height="24" aria-hidden="true"></canvas>
           </td>
           <td>Manuals for two controls, including the ProtoTRAK RMX pack.</td>
         </tr>
@@ -228,7 +232,7 @@
         <div class="reel-media"><video controls playsinline muted preload="none" poster="media/today-loop.jpg" data-src="media/today-loop.mp4" width="1920" height="1080"></video></div>
         <div class="reel-text">
           <p class="tag">Working in simulation, on real hardware</p>
-          <p>The run above, filmed. An offline industrial PC runs a simulated CNC control, and Marcel works it through a small capture-and-keyboard device.</p>
+          <p>The run told above, filmed at 5:09 PM. An offline industrial PC runs a simulated CNC control, and Marcel works it through a small capture-and-keyboard device.</p>
           <p>It sees spindle load climbing, pauses the cut, checks tool life and alarm history, texts the technician, then resets the counter and confirms the machine is running.</p>
         </div>
       </div>
@@ -255,7 +259,15 @@
 <!-- ======================= WHERE EACH PART STANDS ======================= -->
 <section class="status" id="status" aria-labelledby="status-h">
   <div class="wrap status-grid">
-    <h2 class="h-section" id="status-h">Where each part stands.</h2>
+    <div>
+      <h2 class="h-section" id="status-h">Where each part stands.</h2>
+      <ul class="rev-key" aria-label="Key">
+        <li class="rev-real"><span class="lamp-dot" aria-hidden="true"></span>Real machine</li>
+        <li class="rev-sim"><span class="lamp-dot" aria-hidden="true"></span>Simulation</li>
+        <li class="rev-part"><span class="lamp-dot" aria-hidden="true"></span>Partly working</li>
+        <li class="rev-next"><span class="lamp-dot" aria-hidden="true"></span>Next</li>
+      </ul>
+    </div>
     <ol class="rev">
       <li class="rev-real">
         <p class="rev-s"><span class="lamp-dot" aria-hidden="true"></span>Working on a real machine</p>
@@ -270,8 +282,8 @@
         <p>A read-only install on a real CNC control at a university machine shop, pending sign-off. Marcel will watch and alert. It won’t press anything.</p>
       </li>
       <li class="rev-part">
-        <p class="rev-s"><span class="lamp-dot" aria-hidden="true"></span>Partly working: running offline</p>
-        <p>Running with no internet. Diagnosis already runs on a local model. The agent still calls a cloud AI model today, and moving it onto the box in your shop is next.</p>
+        <p class="rev-s"><span class="lamp-dot" aria-hidden="true"></span>Partly working: offline diagnosis</p>
+        <p>Diagnosis runs on a local model with no internet. The agent that runs the loop still calls a cloud AI model today; moving it onto the box in your shop is next.</p>
       </li>
       <li class="rev-part">
         <p class="rev-s"><span class="lamp-dot" aria-hidden="true"></span>Partly working: manuals</p>
@@ -293,7 +305,7 @@
         <p class="op">OP 10</p>
         <h3 class="h-op">Watch</h3>
         <p>Reads the screen, explains alarms and texts the technician. Presses nothing.</p>
-        <p class="op-s">Working in simulation. First real machine next.</p>
+        <p class="op-s">On a real mill, from a phone photo. Live screen-reading on a real control is next.</p>
       </li>
       <li>
         <p class="op">OP 20</p>
@@ -310,7 +322,7 @@
       <li>
         <p class="op">OP 40</p>
         <h3 class="h-op">Repeat what worked</h3>
-        <p>Most stops repeat. A fix your shop has approved and seen work can become automatic, machine by machine. The film shows this step.</p>
+        <p>Many stops repeat: same tool, same block. A fix your shop has approved and seen work can become automatic, machine by machine. The film shows this step.</p>
         <p class="op-s op-plan">Planned</p>
       </li>
     </ol>
@@ -366,6 +378,7 @@
         <figcaption>Each square is a night of the year. Red ones are nights a machine waits for morning, spread at random.</figcaption>
       </figure>
       <p class="formula" data-out="formula">$150 × 6 h × 4 stops</p>
+      <p class="not-counted">Not counted: broken tools, scrapped parts, or a crashed spindle.</p>
     </div>
   </div>
 </section>
@@ -381,7 +394,7 @@
       <details>
         <summary>Does Marcel put my machines on the internet?</summary>
         <p>No. The control never goes on a network. Marcel reads its screen through a splitter and sends keys like a plain USB keyboard.</p>
-        <p>Today, the box Marcel runs on sends texts and calls a cloud AI model. Next, the agent moves onto the box, and only the texts leave the building.</p>
+        <p>Today, the box Marcel runs on sends the messages and calls a cloud AI model. Next, the agent moves onto the box, and only the messages leave the building.</p>
       </details>
       <details>
         <summary>Will it jog an axis or change my programs?</summary>
@@ -391,7 +404,7 @@
       <details>
         <summary>What if Marcel gets it wrong?</summary>
         <p>Real machines start read-only. Stopping is the only thing Marcel does on its own, because stopping is the safe direction.</p>
-        <p>Anything that restarts or changes the machine waits for a technician’s yes, and Marcel checks the screen after every key. When Marcel explains an alarm, every line cites a manual page, or it’s removed. With no alarm, as in the run above, it says it has no manual source.</p>
+        <p>Anything that restarts or changes the machine waits for a technician’s reply, and Marcel checks the screen after every key. On the real ProtoTRAK, every line of an explanation cites a manual page, or it’s removed. The simulated control has no manual, so there Marcel says it has no source, as in the run above.</p>
       </details>
       <details>
         <summary>Which controls does it work with?</summary>
@@ -404,8 +417,21 @@
         <p>Marcel reads the control’s own screen without putting the control on a network, holds the feed before damage, explains the alarm from the manual, and texts the fix.</p>
       </details>
       <details>
+        <summary>What happens if nobody answers?</summary>
+        <p>The machine stays in feed hold, and nothing restarts until a person replies. Before a pilot, we agree with you what should happen if nobody does.</p>
+      </details>
+      <details>
+        <summary>What stops the keyboard device from typing anything else?</summary>
+        <p>Marcel only sends keys from a short reviewed list, like feed hold or a page key, and checks the screen after each one. A real machine starts read-only, with no keyboard connection, until the shop signs off on that machine.</p>
+        <p>On some controls, feed hold and cycle start are panel buttons a keyboard can’t press. We check that before a pilot. Where it can’t, Marcel watches and texts.</p>
+      </details>
+      <details>
+        <summary>My control’s screen is built in. Where does the splitter go?</summary>
+        <p>Some controls drive a built-in screen with no video cable you can reach. We check how each control’s screen can be copied before a pilot, and say plainly if it can’t.</p>
+      </details>
+      <details>
         <summary>What does a pilot look like?</summary>
-        <p>One machine, read-only to start. A small box sits next to the machine, and a splitter goes on the screen cable.</p>
+        <p>One machine, read-only to start. A small box sits next to the machine, and a splitter goes on the screen cable. You tell us who’s on call, and Marcel messages them.</p>
         <p>Unplugging the splitter puts the machine back exactly as it was.</p>
       </details>
     </div>
@@ -414,12 +440,21 @@
 
 <!-- ======================= PILOT + FOUNDER ======================= -->
 <section class="pilot" id="pilot" aria-labelledby="pilot-h">
-  <div class="plate plate-stand" aria-hidden="true">
-    <picture>
-      <source media="(max-width: 860px)" srcset="media/stand-tall.webp">
-      <img src="media/stand.webp" alt="" width="2400" height="1350" loading="lazy" decoding="async">
-    </picture>
-  </div>
+  <figure class="engrave" aria-label="A 3D drawing: Machine 3 engraves MARCEL into a steel plate while Marcel watches its screen.">
+    <div class="engrave-media" aria-hidden="true">
+      <picture class="engrave-poster">
+        <source media="(max-width: 760px)" srcset="media/engrave-tall.webp">
+        <img src="media/engrave.webp" alt="" width="2400" height="1200" loading="lazy" decoding="async">
+      </picture>
+      <canvas class="engrave-canvas"></canvas>
+    </div>
+    <div class="engrave-hud" aria-hidden="true">
+      <p class="eh-k"><span>Machine 3</span><span>O0042</span></p>
+      <ol class="gcode"></ol>
+      <p class="eh-marcel"><span class="eh-dot"></span><span class="eh-text">Marcel is watching</span></p>
+    </div>
+    <figcaption class="engrave-note"><span>A 3D drawing of Machine 3 engraving a plate, run <span class="eh-speed">6</span>× faster than real time.</span> <button class="engrave-again" type="button" hidden>Run it again</button></figcaption>
+  </figure>
   <div class="wrap pilot-grid">
     <div class="pilot-ask">
       <h2 class="h-display h-pilot" id="pilot-h">Pilot Marcel on one machine.</h2>
@@ -433,6 +468,7 @@
       <h3 class="h-sub">Why I’m building Marcel</h3>
       <p>My dad has run CNC machines his whole career. At 18 I worked in a job shop and built its inventory system for more than 1,000 fixtures.</p>
       <p>At IMTS this year I talked with about a hundred people in the industry and heard the same thing over and over. When a machine stops at night, it waits for the one person who knows how to fix it, and those people are retiring faster than new ones come in.</p>
+      <p>Why now: AI models can finally read a control’s screen and a maintenance manual the way a technician does, and small computers can run them right next to the machine.</p>
       <p>I study the security of machines like these. That’s why Marcel uses the screen and keyboard a machine already has, and never puts a control on a network.</p>
       <p class="sig">Shawn Casey, founder</p>
     </div>
@@ -448,7 +484,7 @@
     <div class="tb-cell"><span class="tb-k">Drawn by</span><span class="tb-v">S. Casey</span></div>
     <div class="tb-cell"><span class="tb-k">Date</span><span class="tb-v">2026-11</span></div>
     <div class="tb-cell"><span class="tb-k">Contact</span><span class="tb-v"><a href="mailto:hello@marcelcnc.com">hello@marcelcnc.com</a></span></div>
-    <div class="tb-cell tb-notes"><span class="tb-k">Notes</span><span class="tb-v">The tool at the top is a 3D drawing; its numbers and messages come from Marcel’s simulated run on November 2, 2026. The film is rendered and shows where Marcel is headed. The recordings are real: a simulated control on real hardware, and a real mill photographed with a phone on November 2, 2026.</span></div>
+    <div class="tb-cell tb-notes"><span class="tb-k">Notes</span><span class="tb-v">The control, the tool and the engraving are 3D drawings; the numbers and messages on the control come from Marcel’s simulated run on November 2, 2026. The film is rendered and shows where Marcel is headed. The recordings are real: a simulated control on real hardware, and a real mill photographed with a phone on November 2, 2026.</span></div>
     <div class="tb-cell"><span class="tb-k">Sheet</span><span class="tb-v">1 of 1</span></div>
     <div class="tb-cell"><span class="tb-k">©</span><span class="tb-v">2026 Marcel</span></div>
   </div>

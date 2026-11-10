@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#0a0a0b;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style>
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js"}}</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { createTool3D } from '../shared/tool3d.js';
+const q = new URLSearchParams(location.search);
+const f1 = new FontFace('Hubot Sans', 'url(../node_modules/@fontsource-variable/hubot-sans/files/hubot-sans-latin-standard-normal.woff2)', { weight: '200 900', stretch: '75% 125%' });
+await f1.load(); document.fonts.add(f1);
+const tool = createTool3D(THREE, { canvas: document.getElementById('c'), quality: q.get('q') || 'high', preserveDrawingBuffer: true });
+const w = innerWidth, h = innerHeight;
+tool.resize(w, h, Number(q.get('dpr') || 1));
+const st = {};
+for (const k of ['t','spin','emit','lift','explode','turn','cam','envYaw','parallaxX','parallaxY','holdAt']) if (q.has(k)) st[k] = Number(q.get(k));
+if (q.has('framing')) st.framing = q.get('framing');
+for (const k of ['camAPos','camALook','camBPos','camBLook']) if (q.has(k)) st[k] = q.get(k).split(',').map(Number);
+if (q.has('fov')) st.fov = Number(q.get('fov'));
+if (q.has('shiftX')) st.shiftX = Number(q.get('shiftX'));
+tool.update(st);
+await tool.compile();
+tool.render();
+window.__anchors = {};
+for (const n of ['edge','endmill','shank','collet','nut','holder','flange','taper','stud']) window.__anchors[n] = tool.project(n, w, h);
+window.__ready = true;
+</script></body></html>

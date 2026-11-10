@@ -119,7 +119,7 @@ function setHud(sv) {
   H.block.textContent = r > 0.5 ? 'N330' : sv.load > 72.5 || sv.held ? 'N270' : 'N250';
   H.run.classList.toggle('on', !heldNow);
   H.hold.classList.toggle('on', heldNow);
-  hud.style.opacity = String(Math.max(1 - sv.hudOut, r));
+  hud.style.opacity = String(Math.max(1 - sv.hudOut, r) * (1 - smooth(sv.dim / 0.5)));
 }
 
 /* ---------- reduced motion / no WebGL: posters only ---------- */
@@ -457,6 +457,8 @@ function buildCallouts() {
     video.currentTime = Number(b.dataset.t) + 0.05;
     video.play().catch(() => {});
   }));
+  video.addEventListener('play', () => video.classList.add('playing'));
+  video.addEventListener('pause', () => video.classList.remove('playing'));
   video.addEventListener('timeupdate', () => {
     const t = video.currentTime;
     let on = 0;

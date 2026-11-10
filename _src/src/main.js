@@ -249,7 +249,7 @@ function buildOverlays(st) {
     { kind: 'tool', target: 'flutes', from: 12, show: (u, sv) => sv.cause === 2 && u > A.c[1] + 0.12, off: [-30, 118], offTall: [10, 60], lines: [['CHIPS PACKED IN THE FLUTES?', 13, 'straw'], ['OR THE COOLANT OFF THE CUT', 10.5, 'quiet']], linesTall: [['CHIPS IN THE FLUTES?', 13, 'straw']] },
     { kind: 'dim', show: (u, sv) => sv.cause === 3 && u > A.c[2] + 0.16, lines: [['H02: TOOL LENGTH OFFSET', 13, 'straw'], ['RE-MEASURED AFTER THE SWAP?', 10.5, 'quiet']], linesTall: [['H02 LENGTH OFFSET', 13, 'straw']] },
   ];
-  const PADX = 9, PADY = 7;
+  const PADX = 9, PADY = 7, LINE_GAP = 0.3;   // space between a tag's lines, as a fraction of the line's size
   // a tag is a dark plate with plotted lettering; some items carry a shorter version for phones
   function makeText(lines) {
     const g = mk('g'); let y = PADY, maxW = 0; const paths = [];
@@ -257,9 +257,9 @@ function buildOverlays(st) {
       y += size;
       const { d, width } = hersheyPath(str, size, PADX, y, 'start');
       const p = mk('path', tone === 'straw' ? 'let let-straw' : tone === 'quiet' ? 'let let-quiet' : 'let'); p.setAttribute('d', d);
-      g.appendChild(p); paths.push(p); maxW = Math.max(maxW, width); y += size * 0.62;
+      g.appendChild(p); paths.push(p); maxW = Math.max(maxW, width); y += size * LINE_GAP;
     }
-    const w = lines.length ? maxW + PADX * 2 : 0, h = lines.length ? y - lines[lines.length - 1][1] * 0.62 + PADY + 2 : 0;
+    const w = lines.length ? maxW + PADX * 2 : 0, h = lines.length ? y - lines[lines.length - 1][1] * LINE_GAP + PADY + 2 : 0;
     return { g, paths, w, h };
   }
   for (const it of items) {

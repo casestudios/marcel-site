@@ -3,3 +3,5 @@ README.md
 .DS_Store
 _src
 _film
+.claude
+.openai
